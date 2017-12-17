@@ -1,0 +1,30 @@
+{
+  "name": "optinout.js",
+  "version": "0.1.0",
+  "description": "a simple js framework for handling opt-in and opt-out for tracking & cookies",
+  "main": "dist/optinout.js",
+  "commonModule": "dist/optinout.cjs.js",
+  "module": "dist/optinout.esm.js",
+  "browser": "dist/optinout.umd.js",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/adget/optinout.js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/adget/optinout.js/issues"
+  },
+  "homepage": "https://gitlab.com/adget/optinout.js#README",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "rollup": "^0.52.2",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-node-resolve": "^3.0.0"
+  }
+}
