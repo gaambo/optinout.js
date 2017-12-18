@@ -6,13 +6,11 @@ import pkg from './package.json';
 export default [
     // browser-friendly UMD build
     {
-        entry: 'src/main.js', 
-        dest: pkg.browser, 
-        targets: [
-            { dest: pkg.main, format: 'iife' }, 
-            { dest: pkg.browser, format: 'umd' }
+        input: 'src/main.js', 
+        output: [
+            { file: pkg.main, format: 'iife', name: 'optinout' }, 
+            { file: pkg.browser, format: 'umd', name: 'optinout' }
         ],
-        moduleName: 'optinout', 
         plugins: [
             resolve(), // so Rollup can find `ms`
 			commonjs(), // so Rollup can convert `ms` to an ES module
@@ -28,11 +26,11 @@ export default [
 	// builds from a single configuration where possible, using
 	// the `targets` option which can specify `dest` and `format`)
 	{
-		entry: 'src/main.js',
+		input: 'src/main.js',
 		external: [],
-		targets: [
-			{ dest: pkg.commonModule, format: 'cjs' },
-			{ dest: pkg.module, format: 'es' }
+		output: [
+			{ file: pkg.commonModule, format: 'cjs', name: 'optinout' },
+			{ file: pkg.module, format: 'es', name: 'optinout' }
 		],
 		plugins: [
 			babel({
