@@ -6,5 +6,12 @@
         },
         "modules": false
       }]
-    ]
+    ],
+    "plugins": [
+    ],
+    "env": {
+      "test": {
+        "presets": [["env"]]
+      }
+    }
   }

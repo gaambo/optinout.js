@@ -7,7 +7,10 @@
   "module": "dist/optinout.esm.js",
   "browser": "dist/optinout.umd.js",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "test": "npm run browser-test",
+    "unit-test": "jest",
+    "browser-test": "testcafe 'path:`/c/Program Files (x86)/Google/Chrome/Application/chrome.exe`' test/browser/"
   },
   "repository": {
     "type": "git",
@@ -21,10 +24,27 @@
   "homepage": "https://gitlab.com/adget/optinout.js#README",
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-jest": "^22.4.1",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.1",
+    "http-server": "^0.11.1",
+    "jest": "^22.4.2",
+    "regenerator-runtime": "^0.11.1",
     "rollup": "^0.52.2",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coverageReporters": [
+      "json"
+    ]
+  },
+  "dependencies": {
+    "testcafe": "^0.19.1"
   }
 }
