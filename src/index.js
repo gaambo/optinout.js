@@ -2,6 +2,7 @@ import { default as cookieStorage } from './storages/cookie';
 import { default as localStorage } from './storages/localStorage';
 import { default as dataStorage } from './storages/data';
 import { default as gtmPlugin } from './plugins/gtm';
+import { default as linkPlugin } from './plugins/link'; 
 
 // storage needs to have get & set methods
 // service needs to have mode (optIn|optOut)
@@ -185,6 +186,7 @@ function optInOut(userOptions) {
         }
       });
     }
+    initPlugins(); 
   };
 
   var newObject = new OptInOut(userOptions); 
@@ -225,7 +227,8 @@ const storageAdapters = {
 optInOut.storageAdapters = storageAdapters;
 
 const plugins = {
-  'gtmPlugin': gtmPlugin
+  'gtmPlugin': gtmPlugin,
+  'linkPlugin': linkPlugin
 }; 
 optInOut.plugins = gtmPlugin; 
 
