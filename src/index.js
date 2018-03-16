@@ -1,6 +1,7 @@
 import { default as cookieStorage } from './storages/cookie';
 import { default as localStorage } from './storages/localStorage';
 import { default as dataStorage } from './storages/data';
+import { default as gtmPlugin } from './plugins/gtm';
 
 // storage needs to have get & set methods
 // service needs to have mode (optIn|optOut)
@@ -18,6 +19,7 @@ function optInOut(userOptions) {
       services: {
 
       },
+      plugins: [],
     };
 
     //PRIVATE PROPERTIES
@@ -25,6 +27,7 @@ function optInOut(userOptions) {
     let options;
     let storages;
     let services;
+    let events;
 
     //PRIVATE METHODS
 
@@ -41,15 +44,29 @@ function optInOut(userOptions) {
       }
     };
 
+    let triggerEvent = (event,data) => {
+      let handlers = events[event]; 
+      if(!handlers || handlers.length < 1) {
+        return; 
+      }
+
+      handlers.forEach((handler) => {
+        handler.call(self, [data,event]); 
+      })
+    };
+
     //PUBLIC PROPERTIES 
 
     //PUBLIC METHODS 
     self.optIn = (serviceKey, storageKey = false) => {
-      setValueInStorages(serviceKey, 'optedIn', new Date(), storageKey);
+      let date = new Date();
+      setValueInStorages(serviceKey, 'optedIn', date , storageKey);
+      triggerEvent('optIn', { service: serviceKey, storage: storageKey, date: date });
     };
 
     self.optOut = (serviceKey, storageKey = false) => {
       setValueInStorages(serviceKey, 'optedOut', new Date(), storageKey);
+      triggerEvent('optOut', { service: serviceKey, storage: storageKey, date: date });
     };
 
     self.getOption = (optionKey) => {
@@ -70,14 +87,21 @@ function optInOut(userOptions) {
 
     self.getOptions = () => options;
 
+    self.on = (event,callback) => {
+      let handlers = events[event] || []; 
+      handlers.push(callback); 
+      events[event] = handlers; 
+    };
+
     self.isAllowed = (serviceKey, storageKey) => {
       let service;
       let checkStorages;
       if (serviceKey && services[serviceKey]) {
         service = services[serviceKey];
         if (storageKey && storages[storageKey]) {
-          delete storages[storageKey];
-          checkStorages = [storages[storageKey], ...Object.keys(storages)];
+          let storagesCopy = Object.assign({},storages); 
+          delete storagesCopy[storageKey];
+          checkStorages = [storageKey, ...Object.keys(storagesCopy)];         
         } else {
           checkStorages = Object.keys(storages);
         }
@@ -152,11 +176,45 @@ function optInOut(userOptions) {
       delete options.services;
     };
     initServices();
+
+    let initPlugins = () => {
+      events = {}; 
+      plugins.forEach((plugin) => {
+        if(typeof plugin.init !== 'function') {
+          plugin.init(self); 
+        }
+      });
+    }
   };
 
-  return new OptInOut(userOptions); 
+  var newObject = new OptInOut(userOptions); 
 
+  if(optInOut.instance === undefined) {
+    optInOut.instance = newObject; 
+  }
 
+  return newObject; 
+};
+
+optInOut.isAllowed = (service,storage) => {
+  if(optInOut.instance !== undefined) {
+    return optInOut.instance.isAllowed(service,storage); 
+  }
+  return null;
+};
+
+optInOut.optIn = (service,storage) => {
+  if(optInOut.instance !== undefined) {
+    return optInOut.instance.optIn(service,storage); 
+  }
+  return null; 
+};
+
+optInOut.optOut = (service,storage) => {
+  if(optInOut.instance !== undefined) {
+    return optInOut.instance.optOut(service,storage); 
+  }
+  return null; 
 };
 
 const storageAdapters = {
@@ -165,5 +223,10 @@ const storageAdapters = {
   'dataStorage': dataStorage
 };
 optInOut.storageAdapters = storageAdapters;
+
+const plugins = {
+  'gtmPlugin': gtmPlugin
+}; 
+optInOut.plugins = gtmPlugin; 
 
 export default optInOut;

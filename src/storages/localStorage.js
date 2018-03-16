@@ -71,15 +71,33 @@ const Storage = (userOptions) => {
     } else {
       return false; 
     }
-  }
+  };
+
+  let removeItem = (service,key) => {
+    if(storageAvailable) {
+      if(key) {
+        let currentValue = getItem(service) || {}; 
+        delete currentValue[key]; 
+        setItem(service,key,currentValue,false); //force overwrite
+      } else {
+        localStorage.removeItem(getNamespacedKey(service));
+      }
+      return true; 
+    } else {
+      return false; 
+    }
+  };
 
   return {
-    get: (service,key) => {
+    get: (service,key = false) => {
       return getItem(service,key); 
     },
-    set: (service,key,value,update) => {
+    set: (service,key,value,update = true) => {
       return setItem(service,key,value,update);
     },
+    delete: (service,key = false) => {
+      return removeItem(service,key);
+    }
   };
 };
 

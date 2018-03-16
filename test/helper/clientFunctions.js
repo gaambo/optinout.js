@@ -1,8 +1,5 @@
-export const initOptInOut = async (options) => {
-  const initOptInOut = ClientFunction(() => {
-    window.optouthandler = OptInOut(options); 
-    return window.optouthandler; 
-  }); 
+import { ClientFunction } from 'testcafe';
 
-  return await initOptInOut(); 
-};
+export const getLocalStorageItem = ClientFunction((key => {
+  return localStorage.getItem(key); 
+}));

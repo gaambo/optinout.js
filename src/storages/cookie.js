@@ -34,11 +34,13 @@ const Storage = (userOptions) => {
   let options = Object.assign({}, defaultOptions, userOptions);
 
 
-  let getExpirationString = () => {
+  let getExpirationString = (date) => {
+    date = date ? date : options.expiration;
+
     let expires; 
-    switch (options.expiration.constructor) {
+    switch (date.constructor) {
       case Number:
-        expires = options.expiration === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + options.expiration;
+        expires = date === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + date;
         /*
         Note: Despite officially defined in RFC 6265, the use of `max-age` is not compatible with any
         version of Internet Explorer, Edge and some mobile browsers. Therefore passing a number to
@@ -50,10 +52,10 @@ const Storage = (userOptions) => {
         */
         break;
       case String:
-        expires = "; expires=" + options.expiration;
+        expires = "; expires=" + date;
         break;
       case Date:
-        expires = "; expires=" + options.expiration.toUTCString();
+        expires = "; expires=" + date.toUTCString();
         break;
     }
 
@@ -67,7 +69,7 @@ const Storage = (userOptions) => {
   let getItem = function (service,key) {
     if (!service) { return null; }
 
-    let value = decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(getKey(service)).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+    let value = getValue(service) || null;
 
     let valueJson = JSON.parse(value); 
     if(key) {
@@ -77,13 +79,17 @@ const Storage = (userOptions) => {
     }
   };
 
+  let writeValue = (k,v,expires) => {
+    document.cookie = encodeURIComponent(k) + "=" + encodeURIComponent(JSON.stringify(v)) + getExpirationString(expires) + (options.domain ? "; domain=" + options.domain : "") + (options.Path ? "; path=" + options.Path : "") + (options.secure ? "; secure" : "");
+  };
+
+  let getValue = (key) => {
+    if (!key || /^(?:expires|max\-age|path|domain|secure)$/i.test(key)) { return false; }
+    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(getKey(key)).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1"));
+  };
+
   let setItem = function (service,key,value,update) {
     if (!service || /^(?:expires|max\-age|path|domain|secure)$/i.test(service)) { return false; }
-    let expires = getExpirationString();
-
-    let writeValue = (k,v) => {
-      document.cookie = encodeURIComponent(k) + "=" + encodeURIComponent(JSON.stringify(v)) + expires + (options.domain ? "; domain=" + options.domain : "") + (options.Path ? "; path=" + options.Path : "") + (options.secure ? "; secure" : "");
-    };
     
     let saveValue;
 
@@ -100,26 +106,33 @@ const Storage = (userOptions) => {
     return true;
   };
 
-  let removeItem = function (key) {
-    if (!hasItem(key)) { return false; }
-    document.cookie = encodeURIComponent(getKey(key)) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (options.domain ? "; domain=" + options.domain : "") + (options.path ? "; path=" + options.path : "");
-    return true;
+  let removeItem = function (service,key) {
+
+    if(!service || !hasItem(service)) { return false; }
+
+    if(key) {
+      let currentValue = getItem(service,key); 
+      delete currentValue[key]; 
+      return setItem(service,key,currentValue,false); //force overwrite
+    } else {
+      writeValue(getKey(service),'', new Date('01 Jan 1970')); 
+      return true; 
+    }
   };
 
-  let hasItem = function (key) {
-    if (!key || /^(?:expires|max\-age|path|domain|secure)$/i.test(key)) { return false; }
-    return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(getKey(key)).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+  let hasItem = function (service) {
+    return Boolean(getValue(service));
   };
 
   return {
-    get: (service,key) => {
+    get: (service,key = false) => {
       return getItem(service,key);
     },
-    set: (service,key,value,update) => {
+    set: (service,key,value,update = true) => {
       return setItem(service,key,value,update);
     },
-    delete: (service) => {
-      return removeItem(service);
+    delete: (service,key = false) => {
+      return removeItem(service,key);
     }
   };
 

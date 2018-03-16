@@ -23,12 +23,32 @@ const Storage = (data) => {
     return true; 
   };
 
+  let removeItem = (service,key) => {
+    if(key) {
+      delete data[service][key]; 
+    } else {
+      delete data[service]; 
+    }
+    return true; 
+  };
+
+  let hasItem = (service,key) => {
+    if(key) {
+      return ( (service in data) && (key in data[service]) ); 
+    } else {
+      return (service in data); 
+    }
+  }
+
   return {
     get: (service,key) => {
       return getItem(service,key);
     },
     set: (service,key,value,update) => {
       return setItem(service,key,value,update);
+    },
+    delete: (service,key) => {
+      return removeItem(service,key);
     },
     getData: () => data,
   };
