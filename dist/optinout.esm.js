@@ -57,30 +57,6 @@ var toConsumableArray = function (arr) {
   }
 };
 
-/*\
-|*|
-|*|	:: cookies.js ::
-|*|
-|*|	A complete cookies reader/writer framework with full unicode support.
-|*|
-|*|	Revision #3 - July 13th, 2017
-|*|
-|*|	https://developer.mozilla.org/en-US/docs/Web/API/document.cookie
-|*|	https://developer.mozilla.org/User:fusionchess
-|*|	https://github.com/madmurphy/cookies.js
-|*|
-|*|	This framework is released under the GNU Public License, version 3 or later.
-|*|	http://www.gnu.org/licenses/gpl-3.0-standalone.html
-|*|
-|*|	Syntaxes:
-|*|
-|*|	* docCookies.setItem(name, value[, end[, path[, domain[, secure]]]])
-|*|	* docCookies.getItem(name)
-|*|	* docCookies.removeItem(name[, path[, domain]])
-|*|	* docCookies.hasItem(name)
-|*|
-\*/
-
 var Storage = function Storage(userOptions) {
   var defaultOptions = {
     namespace: 'optInOut',
@@ -93,27 +69,21 @@ var Storage = function Storage(userOptions) {
   var options = Object.assign({}, defaultOptions, userOptions);
 
   var getExpirationString = function getExpirationString(date) {
-    date = date ? date : options.expiration;
+    var expirationDate = date || options.expiration;
 
     var expires = void 0;
-    switch (date.constructor) {
+    switch (expirationDate.constructor) {
       case Number:
-        expires = date === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + date;
-        /*
-        Note: Despite officially defined in RFC 6265, the use of `max-age` is not compatible with any
-        version of Internet Explorer, Edge and some mobile browsers. Therefore passing a number to
-        the end parameter might not work as expected. A possible solution might be to convert the the
-        relative time to an absolute time. For instance, replacing the previous line with:
-        */
-        /*
-        sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; expires=" + (new Date(vEnd * 1e3 + Date.now())).toUTCString();
-        */
+        expires = date === Infinity ? '; expires=Fri, 31 Dec 9999 23:59:59 GMT' : '; max-age=' + expirationDate;
         break;
       case String:
-        expires = "; expires=" + date;
+        expires = '; expires=' + expirationDate;
         break;
       case Date:
-        expires = "; expires=" + date.toUTCString();
+        expires = '; expires=' + expirationDate.toUTCString();
+        break;
+      default:
+        expires = '';
         break;
     }
 
@@ -122,6 +92,13 @@ var Storage = function Storage(userOptions) {
 
   var getKey = function getKey(key) {
     return options.namespace + '.' + key;
+  };
+
+  var getValue = function getValue(key) {
+    if (!key || /^(?:expires|max-age|path|domain|secure)$/i.test(key)) {
+      return false;
+    }
+    return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(getKey(key)).replace(/[-.+*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1'));
   };
 
   var getItem = function getItem(service, key) {
@@ -134,24 +111,16 @@ var Storage = function Storage(userOptions) {
     var valueJson = JSON.parse(value);
     if (key) {
       return valueJson[key] || null;
-    } else {
-      return valueJson || null;
     }
+    return valueJson || null;
   };
 
-  var writeValue = function writeValue(k, v, expires) {
-    document.cookie = encodeURIComponent(k) + "=" + encodeURIComponent(JSON.stringify(v)) + getExpirationString(expires) + (options.domain ? "; domain=" + options.domain : "") + (options.Path ? "; path=" + options.Path : "") + (options.secure ? "; secure" : "");
-  };
-
-  var getValue = function getValue(key) {
-    if (!key || /^(?:expires|max\-age|path|domain|secure)$/i.test(key)) {
-      return false;
-    }
-    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(getKey(key)).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1"));
+  var writeValue = function writeValue(key, value, expires) {
+    document.cookie = encodeURIComponent(key) + '=' + encodeURIComponent(JSON.stringify(value)) + getExpirationString(expires) + (options.domain ? '; domain=' + options.domain : '') + (options.Path ? '; path=' + options.Path : '') + (options.secure ? '; secure' : '');
   };
 
   var setItem = function setItem(service, key, value, update) {
-    if (!service || /^(?:expires|max\-age|path|domain|secure)$/i.test(service)) {
+    if (!service || /^(?:expires|max-age|path|domain|secure)$/i.test(service)) {
       return false;
     }
 
@@ -170,8 +139,11 @@ var Storage = function Storage(userOptions) {
     return true;
   };
 
-  var removeItem = function removeItem(service, key) {
+  var hasItem = function hasItem(service) {
+    return Boolean(getValue(service));
+  };
 
+  var removeItem = function removeItem(service, key) {
     if (!service || !hasItem(service)) {
       return false;
     }
@@ -179,31 +151,23 @@ var Storage = function Storage(userOptions) {
     if (key) {
       var currentValue = getItem(service, key);
       delete currentValue[key];
-      return setItem(service, key, currentValue, false); //force overwrite
-    } else {
-      writeValue(getKey(service), '', new Date('01 Jan 1970'));
-      return true;
+      return setItem(service, key, currentValue, false); // force overwrite
     }
-  };
-
-  var hasItem = function hasItem(service) {
-    return Boolean(getValue(service));
+    writeValue(getKey(service), '', new Date('01 Jan 1970'));
+    return true;
   };
 
   return {
     get: function get$$1(service) {
       var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
       return getItem(service, key);
     },
     set: function set$$1(service, key, value) {
       var update = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-
       return setItem(service, key, value, update);
     },
     delete: function _delete(service) {
       var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
       return removeItem(service, key);
     }
   };
@@ -446,262 +410,231 @@ var LinkHelper = function LinkHelper(userOptions) {
 // storage needs to have get & set methods
 // service needs to have mode (optIn|optOut)
 
-function optInOut(userOptions) {
+var OptInOut = function OptInOut(userOptions) {
+  var self = {};
 
-  function OptInOut(userOptions) {
-    var self = this;
-    var defaultOptions = {
-      storages: {
-        'cookie': Storage(),
-        'localStorage': Storage$1(),
-        'dataStorage': Storage$2()
-      },
-      services: {},
-      plugins: []
-    };
+  var defaultOptions = {
+    storages: {
+      cookie: Storage(),
+      localStorage: Storage$1(),
+      dataStorage: Storage$2()
+    },
+    services: {},
+    plugins: []
+  };
 
-    //PRIVATE PROPERTIES
+  // PRIVATE PROPERTIES
 
-    var options = void 0;
-    var storages = void 0;
-    var services = void 0;
-    var events = void 0;
+  var options = void 0;
+  var storages = void 0;
+  var services = void 0;
+  var events = void 0;
 
-    //PRIVATE METHODS
+  // PRIVATE METHODS
 
-    var setValueInStorages = function setValueInStorages(serviceKey, key, value) {
-      var storageKey = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-      var update = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
+  var setValueInStorages = function setValueInStorages(serviceKey, key, value) {
+    var storageKey = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+    var update = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
 
-      if (!services[serviceKey]) throw new Error('service ' + serviceKey + ' is not configured for OptInOut');
+    if (!services[serviceKey]) throw new Error('service ' + serviceKey + ' is not configured for OptInOut');
 
+    if (storageKey && storages[storageKey]) {
+      storages[storageKey].set(serviceKey, key, value);
+    } else {
+      Object.keys(storages).forEach(function (storagesKey) {
+        storages[storagesKey].set(serviceKey, key, value, update);
+      });
+    }
+  };
+
+  var triggerEvent = function triggerEvent(event, data) {
+    var handlers = events[event];
+    if (!handlers || handlers.length < 1) {
+      return;
+    }
+
+    handlers.forEach(function (handler) {
+      handler.call(self, [data, event]);
+    });
+  };
+
+  // PUBLIC PROPERTIES
+
+  // PUBLIC METHODS
+  self.optIn = function (serviceKey) {
+    var storageKey = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+    var date = new Date();
+    setValueInStorages(serviceKey, 'optedIn', date, storageKey);
+    triggerEvent('optIn', { service: serviceKey, storage: storageKey, date: date });
+  };
+
+  self.optOut = function (serviceKey) {
+    var storageKey = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+    var date = new Date();
+    setValueInStorages(serviceKey, 'optedOut', date, storageKey);
+    triggerEvent('optOut', { service: serviceKey, storage: storageKey, date: date });
+  };
+
+  self.getOption = function (optionKey) {
+    return options[optionKey];
+  };
+
+  self.getStorage = function (storageKey) {
+    return storages[storageKey];
+  };
+
+  self.getService = function (serviceKey) {
+    return services[serviceKey];
+  };
+
+  self.getStorages = function () {
+    return storages;
+  };
+
+  self.getServices = function () {
+    return services;
+  };
+
+  self.getOptions = function () {
+    return options;
+  };
+
+  self.on = function (event, callback) {
+    var handlers = events[event] || [];
+    handlers.push(callback);
+    events[event] = handlers;
+  };
+
+  self.isAllowed = function (serviceKey, storageKey) {
+    var service = void 0;
+    var checkStorages = void 0;
+    if (serviceKey && services[serviceKey]) {
+      service = services[serviceKey];
       if (storageKey && storages[storageKey]) {
-        storages[storageKey].set(serviceKey, key, value);
+        var storagesCopy = Object.assign({}, storages);
+        delete storagesCopy[storageKey];
+        checkStorages = [storageKey].concat(toConsumableArray(Object.keys(storagesCopy)));
       } else {
-        for (var storagesKey in storages) {
-          if (!storages.hasOwnProperty(storagesKey)) continue;
-          storages[storagesKey].set(serviceKey, key, value, update);
+        checkStorages = Object.keys(storages);
+      }
+    }
+
+    var allowed = null; // default
+
+    checkStorages.every(function (currentStorageKey) {
+      var storage = storages[currentStorageKey];
+      var value = storage.get(serviceKey);
+
+      if (typeof value === 'undefined' || value === undefined || value === null) return true; // continue
+
+      if (service.mode === 'optIn') {
+        if (value.optedIn === false) {
+          allowed = false;
+        } else if (value.optedIn && !value.optedOut) {
+          allowed = true;
+        } else if (Date.parse(value.optedOut) < Date.parse(value.optedIn)) {
+          allowed = true;
+        } else if (Date.parse(value.optedOut) > Date.parse(value.optedIn)) {
+          allowed = false;
         }
-      }
-    };
-
-    var triggerEvent = function triggerEvent(event, data) {
-      var handlers = events[event];
-      if (!handlers || handlers.length < 1) {
-        return;
-      }
-
-      handlers.forEach(function (handler) {
-        handler.call(self, [data, event]);
-      });
-    };
-
-    //PUBLIC PROPERTIES 
-
-    //PUBLIC METHODS 
-    self.optIn = function (serviceKey) {
-      var storageKey = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-      var date = new Date();
-      setValueInStorages(serviceKey, 'optedIn', date, storageKey);
-      triggerEvent('optIn', { service: serviceKey, storage: storageKey, date: date });
-    };
-
-    self.optOut = function (serviceKey) {
-      var storageKey = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-      setValueInStorages(serviceKey, 'optedOut', new Date(), storageKey);
-      triggerEvent('optOut', { service: serviceKey, storage: storageKey, date: date });
-    };
-
-    self.getOption = function (optionKey) {
-      return options[optionKey];
-    };
-
-    self.getStorage = function (storageKey) {
-      return storages[storageKey];
-    };
-
-    self.getService = function (serviceKey) {
-      return services[serviceKey];
-    };
-
-    self.getStorages = function () {
-      return storages;
-    };
-
-    self.getServices = function () {
-      return services;
-    };
-
-    self.getOptions = function () {
-      return options;
-    };
-
-    self.on = function (event, callback) {
-      var handlers = events[event] || [];
-      handlers.push(callback);
-      events[event] = handlers;
-    };
-
-    self.isAllowed = function (serviceKey, storageKey) {
-      var service = void 0;
-      var checkStorages = void 0;
-      if (serviceKey && services[serviceKey]) {
-        service = services[serviceKey];
-        if (storageKey && storages[storageKey]) {
-          var storagesCopy = Object.assign({}, storages);
-          delete storagesCopy[storageKey];
-          checkStorages = [storageKey].concat(toConsumableArray(Object.keys(storagesCopy)));
-        } else {
-          checkStorages = Object.keys(storages);
+      } else if (service.mode === 'optOut') {
+        if (value.optedIn === undefined || !value.optedIn) {
+          allowed = !value.optedOut;
+        } else if (Date.parse(value.optedIn) > Date.parse(value.optedOut)) {
+          allowed = true;
+        } else if (Date.parse(value.optedIn) < Date.parse(value.optedOut)) {
+          allowed = false;
         }
       }
 
-      var allowed = null; //default
+      if (allowed !== null) return false; // break
+      return true;
+    });
 
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+    if (allowed === null) {
+      // need to use default value
+      allowed = service.default ? service.default : service.mode !== 'optIn';
+    }
 
-      try {
-        for (var _iterator = checkStorages[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var currentStorageKey = _step.value;
+    return allowed;
+  };
 
-          var storage = storages[currentStorageKey];
-          var value = storage.get(serviceKey);
+  // INIT OBJECT
 
-          if (typeof value === 'undefined' || value === undefined || value === null) continue;
+  // PROPERTIES
+  // options
+  options = Object.assign({}, defaultOptions, userOptions);
 
-          if (service.mode == 'optIn') {
-            if (value.optedIn == false) {
-              allowed = false;
-            } else if (value.optedIn && !value.optedOut) {
-              allowed = true;
-            } else if (Date.parse(value.optedOut) < Date.parse(value.optedIn)) {
-              allowed = true;
-            } else if (Date.parse(value.optedOut) > Date.parse(value.optedIn)) {
-              allowed = false;
-            }
-          } else if (service.mode == 'optOut') {
-            if (value.optedIn == undefined || value.optedIn == false) {
-              allowed = !value.optedOut;
-            } else if (Date.parse(value.optedIn) > Date.parse(value.optedOut)) {
-              allowed = true;
-            } else if (Date.parse(value.optedIn) < Date.parse(value.optedOut)) {
-              allowed = false;
-            }
-          }
+  // init storages
+  storages = {};
+  Object.keys(options.storages).forEach(function (storagesKey) {
+    var storage = options.storages[storagesKey];
+    if (typeof storage.get === 'function' && typeof storage.set === 'function') {
+      storages[storagesKey] = options.storages[storagesKey];
+    }
+    return true;
+  });
+  delete options.storages;
 
-          if (allowed !== null) break;
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
+  // init services
+  services = {};
+  Object.keys(options.services).forEach(function (serviceKey) {
+    var service = options.services[serviceKey];
+    if (typeof service.mode !== 'undefined') {
+      services[serviceKey] = options.services[serviceKey];
+    }
+  });
+  delete options.services;
 
-      if (allowed === null) {
-        //need to use default value
-        allowed = service.default ? service.default : service.mode == 'optIn' ? false : true;
-      }
+  // init plugins
+  events = {};
+  options.plugins.forEach(function (plugin) {
+    if (typeof plugin.init !== 'function') {
+      plugin.init(self);
+    }
+  });
 
-      return allowed;
-    };
+  OptInOut.instance = self;
+  return self;
+};
 
-    //INIT OBJECT
-
-    //PROPERTIES
-    //options
-    options = Object.assign({}, defaultOptions, userOptions);
-
-    var initStorages = function initStorages() {
-      storages = {};
-      for (var storagesKey in options.storages) {
-        if (!options.storages.hasOwnProperty(storagesKey)) continue;
-        var storage = options.storages[storagesKey];
-        if (typeof storage.get === 'function' && typeof storage.set === 'function') {
-          storages[storagesKey] = options.storages[storagesKey];
-        }
-      }
-      delete options.storages;
-    };
-    initStorages();
-
-    var initServices = function initServices() {
-      services = {};
-      for (var serviceKey in options.services) {
-        if (!options.services.hasOwnProperty(serviceKey)) continue;
-        var service = options.services[serviceKey];
-        if (typeof service.mode !== 'undefined') {
-          services[serviceKey] = options.services[serviceKey];
-        }
-      }
-      delete options.services;
-    };
-    initServices();
-
-    var initPlugins = function initPlugins() {
-      events = {};
-      plugins.forEach(function (plugin) {
-        if (typeof plugin.init !== 'function') {
-          plugin.init(self);
-        }
-      });
-    };
-    initPlugins();
-  }
-
-  var newObject = new OptInOut(userOptions);
-
-  if (optInOut.instance === undefined) {
-    optInOut.instance = newObject;
-  }
-
-  return newObject;
-}
-
-optInOut.isAllowed = function (service, storage) {
-  if (optInOut.instance !== undefined) {
-    return optInOut.instance.isAllowed(service, storage);
+// set global accessable methods
+OptInOut.isAllowed = function (service, storage) {
+  if (OptInOut.instance !== undefined) {
+    return OptInOut.instance.isAllowed(service, storage);
   }
   return null;
 };
 
-optInOut.optIn = function (service, storage) {
-  if (optInOut.instance !== undefined) {
-    return optInOut.instance.optIn(service, storage);
+OptInOut.optIn = function (service, storage) {
+  if (OptInOut.instance !== undefined) {
+    return OptInOut.instance.optIn(service, storage);
   }
   return null;
 };
 
-optInOut.optOut = function (service, storage) {
-  if (optInOut.instance !== undefined) {
-    return optInOut.instance.optOut(service, storage);
+OptInOut.optOut = function (service, storage) {
+  if (OptInOut.instance !== undefined) {
+    return OptInOut.instance.optOut(service, storage);
   }
   return null;
 };
 
+// set global accessable/namespaced storageadapters
 var storageAdapters = {
-  'cookieStorage': Storage,
-  'localStorage': Storage$1,
-  'dataStorage': Storage$2
+  cookieStorage: Storage,
+  localStorage: Storage$1,
+  dataStorage: Storage$2
 };
-optInOut.storageAdapters = storageAdapters;
+OptInOut.storageAdapters = storageAdapters;
 
+// set global accessable/namespaced plugins
 var plugins = {
-  'gtmPlugin': GTM,
-  'linkPlugin': LinkHelper
+  gtmPlugin: GTM,
+  linkPlugin: LinkHelper
 };
-optInOut.plugins = GTM;
+OptInOut.plugins = plugins;
 
-export default optInOut;
+export default OptInOut;

@@ -109,5 +109,5 @@ test('Global Instance OptOut isAllowed', async t => {
     return OptInOut.isAllowed('facebook','data');
   }); 
   let allowed = await initOptInOut({}); 
-  await t.expect(allowed).ok();
+  await t.expect(allowed).notOk();
 });

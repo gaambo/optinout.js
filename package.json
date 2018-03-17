@@ -11,7 +11,8 @@
     "build": "rollup -c",
     "test": "npm run browser-test",
     "unit-test": "jest",
-    "browser-test": "testcafe chrome,edge,ie,firefox test/browser/"
+    "browser-test": "testcafe 'chrome' test/browser/",
+    "test-server": "node test/index.js"
   },
   "repository": "gitlab:optinout/optinout.js",
   "author": "fabian todt",

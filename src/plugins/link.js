@@ -1,30 +1,29 @@
 const LinkHelper = (userOptions) => {
-
   const defaultOptions = {
     optInClickSelector: '.optinout-optIn',
-    optOutClickSelector: '.optout-optOut'
+    optOutClickSelector: '.optout-optOut',
   };
 
-  let options = Object.assign({}, defaultOptions, userOptions);
+  const options = Object.assign({}, defaultOptions, userOptions);
 
   const init = (optInOut) => {
-    if(document && document.querySelectorAll) {
-      if(options.optInClickSelector) {
+    if (document && document.querySelectorAll) {
+      if (options.optInClickSelector) {
         let elements;
-        //OPTIN
+        // OPTIN
         elements = document.querySelectorAll(options.optInClickSelector);
-        elements.forEach(function(el) {
-          if(el.dataset.service) {
+        elements.forEach((el) => {
+          if (el.dataset.service) {
             el.addEventListener('click', () => {
               optInOut.optIn(el.dataset.service, el.dataset.storage || false);
             });
           }
         });
 
-        //OPTOUT
+        // OPTOUT
         elements = document.querySelectorAll(options.optOutClickSelector);
-        elements.forEach(function(el) {
-          if(el.dataset.service) {
+        elements.forEach((el) => {
+          if (el.dataset.service) {
             el.addEventListener('click', () => {
               optInOut.optOut(el.dataset.service, el.dataset.storage || false);
             });
@@ -35,8 +34,8 @@ const LinkHelper = (userOptions) => {
   };
 
   return {
-    init: init
+    init,
   };
 };
 
-export default LinkHelper; 
+export default LinkHelper;

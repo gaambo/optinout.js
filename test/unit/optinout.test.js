@@ -1,8 +1,8 @@
-import { default as optInOut } from '../../src/index';
+import OptInOut from '../../src/index';
 
 test("optout", () => {
-  let dataStorage =  optInOut.storageAdapters.dataStorage({});
-  let obj = optInOut({
+  let dataStorage =  OptInOut.storageAdapters.dataStorage({});
+  let obj = OptInOut({
     storages: {
       data: dataStorage,
     },
@@ -22,8 +22,8 @@ test("optout", () => {
 });
 
 test("optin", () => {
-  let dataStorage =  optInOut.storageAdapters.dataStorage({});
-  let obj = optInOut({
+  let dataStorage =  OptInOut.storageAdapters.dataStorage({});
+  let obj = OptInOut({
     storages: {
       data: dataStorage,
     },

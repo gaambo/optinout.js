@@ -6,7 +6,7 @@ test("initialisationEmpty", () => {
     services: {}
   });
 
-  expect(obj.getOptions()).toEqual({});
+  expect(obj.getOptions()).toEqual({ plugins: [] });
   expect(obj.getServices()).toEqual({});
   expect(obj.getStorages()).toEqual({});
 });
@@ -20,7 +20,7 @@ test("initialisationStorages", () => {
     services: {}
   });
 
-  expect(obj.getOptions()).toEqual({});
+  expect(obj.getOptions()).toEqual({ plugins: [] });
   expect(obj.getServices()).toEqual({});
   expect(obj.getStorages()).toEqual(storages);
 });
@@ -34,7 +34,7 @@ test("initialisationServices", () => {
     services
   });
 
-  expect(obj.getOptions()).toEqual({});
+  expect(obj.getOptions()).toEqual({ plugins: [] });
   expect(obj.getServices()).toEqual(services);
   expect(obj.getStorages()).toEqual({});
 });

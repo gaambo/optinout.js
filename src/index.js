@@ -1,8 +1,8 @@
-import * as cookieStorage from './storages/cookie';
-import * as localStorage from './storages/localStorage';
-import * as dataStorage from './storages/data';
-import * as gtmPlugin from './plugins/gtm';
-import * as linkPlugin from './plugins/link';
+import cookieStorage from './storages/cookie';
+import localStorage from './storages/localStorage';
+import dataStorage from './storages/data';
+import gtmPlugin from './plugins/gtm';
+import linkPlugin from './plugins/link';
 
 // storage needs to have get & set methods
 // service needs to have mode (optIn|optOut)
@@ -103,7 +103,7 @@ const OptInOut = (userOptions) => {
 
     let allowed = null; // default
 
-    Object.keys(checkStorages).every((currentStorageKey) => {
+    checkStorages.every((currentStorageKey) => {
       const storage = storages[currentStorageKey];
       const value = storage.get(serviceKey);
 
