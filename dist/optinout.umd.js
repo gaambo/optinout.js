@@ -374,19 +374,78 @@ var Storage$2 = function Storage(data) {
 
 var GTM = function GTM(userOptions) {
 
-  var optIn = function optIn(data) {};
+  var defaultOptions = {
+    dataLayerKey: 'dataLayer',
+    eventNamespace: false
+  };
 
-  var optOut = function optOut(data) {};
+  var options = Object.assign({}, defaultOptions, userOptions);
+
+  var getEventName = function getEventName(event) {
+    if (options.eventNamespace) {
+      return options.eventNamespace + '.' + event;
+    } else {
+      return event;
+    }
+  };
+
+  var eventCallback = function eventCallback(data, event) {
+    window[options.dataLayerKey].push({
+      'event': getEventName(event),
+      'service': data.service || ''
+    });
+  };
 
   var init = function init(optInOut) {
-    optInOut.on('optin', optIn);
-    optInOut.on('optOut', optOut);
+    optInOut.on('optin', eventCallback);
+    optInOut.on('optOut', eventCallback);
   };
 
   return {
     init: init,
     optIn: optIn,
     optOut: optOut
+  };
+};
+
+var LinkHelper = function LinkHelper(userOptions) {
+
+  var defaultOptions = {
+    optInClickSelector: '.optinout-optIn',
+    optOutClickSelector: '.optout-optOut'
+  };
+
+  var options = Object.assign({}, defaultOptions, userOptions);
+
+  var init = function init(optInOut) {
+    if (document && document.querySelectorAll) {
+      if (options.optInClickSelector) {
+        var elements = void 0;
+        //OPTIN
+        elements = document.querySelectorAll(options.optInClickSelector);
+        elements.forEach(function (el) {
+          if (el.dataset.service) {
+            el.addEventListener('click', function () {
+              optInOut.optIn(el.dataset.service, el.dataset.storage || false);
+            });
+          }
+        });
+
+        //OPTOUT
+        elements = document.querySelectorAll(options.optOutClickSelector);
+        elements.forEach(function (el) {
+          if (el.dataset.service) {
+            el.addEventListener('click', function () {
+              optInOut.optOut(el.dataset.service, el.dataset.storage || false);
+            });
+          }
+        });
+      }
+    }
+  };
+
+  return {
+    init: init
   };
 };
 
@@ -597,7 +656,15 @@ function optInOut(userOptions) {
     };
     initServices();
 
-    
+    var initPlugins = function initPlugins() {
+      events = {};
+      plugins.forEach(function (plugin) {
+        if (typeof plugin.init !== 'function') {
+          plugin.init(self);
+        }
+      });
+    };
+    initPlugins();
   }
 
   var newObject = new OptInOut(userOptions);
@@ -637,6 +704,10 @@ var storageAdapters = {
 };
 optInOut.storageAdapters = storageAdapters;
 
+var plugins = {
+  'gtmPlugin': GTM,
+  'linkPlugin': LinkHelper
+};
 optInOut.plugins = GTM;
 
 return optInOut;

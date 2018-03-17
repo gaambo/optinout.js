@@ -10,8 +10,9 @@ const LinkHelper = (userOptions) => {
   const init = (optInOut) => {
     if(document && document.querySelectorAll) {
       if(options.optInClickSelector) {
+        let elements;
         //OPTIN
-        let elements = document.querySelectorAll(options.optInClickSelector);
+        elements = document.querySelectorAll(options.optInClickSelector);
         elements.forEach(function(el) {
           if(el.dataset.service) {
             el.addEventListener('click', () => {
@@ -21,7 +22,7 @@ const LinkHelper = (userOptions) => {
         });
 
         //OPTOUT
-        let elements = document.querySelectorAll(options.optOutClickSelector);
+        elements = document.querySelectorAll(options.optOutClickSelector);
         elements.forEach(function(el) {
           if(el.dataset.service) {
             el.addEventListener('click', () => {
