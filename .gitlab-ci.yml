@@ -2,7 +2,7 @@ image: node:8
 
 # uses new npm ci command
 before_script: 
-  - npm ci
+  - npm install
 
 # This folder is cached between builds
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
