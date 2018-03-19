@@ -8,11 +8,13 @@
   "module": "dist/optinout.esm.js",
   "browser": "dist/optinout.umd.js",
   "scripts": {
-    "build": "rollup -c",
-    "test": "npm run browser-test",
+    "build": "gulp build",
+    "lint": "eslint src",
+    "test": "npm run unit-test && npm run browser-test",
     "unit-test": "jest",
     "browser-test": "testcafe 'chrome' test/browser/",
-    "test-server": "node test/index.js"
+    "test-server": "node test/index.js",
+    "postversion": "git push --folow-tags"
   },
   "repository": "gitlab:optinout/optinout.js",
   "author": "fabian todt",
@@ -26,18 +28,30 @@
     "babel-jest": "^22.4.1",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.1",
+    "del": "^3.0.0",
     "eslint": "^4.19.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
+    "gulp-plumber": "^1.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-rollup": "^2.16.2",
+    "gulp-uglify": "^3.0.0",
     "http-server": "^0.11.1",
     "jest": "^22.4.2",
     "regenerator-runtime": "^0.11.1",
     "rollup": "^0.52.3",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.4.1",
-    "rollup-plugin-node-resolve": "^3.2.0"
+    "rollup-plugin-node-resolve": "^3.2.0",
+    "rollup-plugin-uglify": "^3.0.0",
+    "rollup-stream": "^1.24.1",
+    "uglify-es": "^3.3.9",
+    "vinyl-source-stream": "^2.0.0"
   },
+  "files": [
+    "dist"
+  ],
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
@@ -48,6 +62,7 @@
     ]
   },
   "dependencies": {
+    "gulp": "^3.9.1",
     "testcafe": "^0.19.1"
   }
 }

@@ -1,41 +1,35 @@
 const GTM = (userOptions) => {
-
   const defaultOptions = {
     dataLayerKey: 'dataLayer',
-    eventNamespace: false
+    eventNamespace: false,
   };
 
-  let options = Object.assign({}, defaultOptions, userOptions);
+  const options = Object.assign({}, defaultOptions, userOptions);
 
-  const getDataLayer = () => {
-    return window[options.dataLayerKey] || []; 
-  }
+  // const getDataLayer = () => window[options.dataLayerKey] || [];
 
   const getEventName = (event) => {
-    if(options.eventNamespace) {
-      return options.eventNamespace + '.' + event; 
-    } else {
-      return event; 
+    if (options.eventNamespace) {
+      return `${options.eventNamespace}.${event}`;
     }
-  }
+    return event;
+  };
 
-  const eventCallback = (data,event) => {
+  const eventCallback = (data, event) => {
     window[options.dataLayerKey].push({
-      'event': getEventName(event),
-      'service': data.service || ''
+      event: getEventName(event),
+      service: data.service || '',
     });
   };
 
   const init = (optInOut) => {
     optInOut.on('optin', eventCallback);
-    optInOut.on('optOut', eventCallback); 
+    optInOut.on('optOut', eventCallback);
   };
 
   return {
-    init: init,
-    optIn: optIn, 
-    optOut: optOut
+    init,
   };
 };
 
-export default GTM; 
+export default GTM;
