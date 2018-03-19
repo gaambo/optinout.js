@@ -10,7 +10,7 @@
   "scripts": {
     "build": "gulp build",
     "lint": "eslint src",
-    "test": "npm run unit-test && npm run browser-test",
+    "test": "npm run unit-test",
     "unit-test": "jest",
     "browser-test": "testcafe 'chrome' test/browser/",
     "test-server": "node test/index.js",
