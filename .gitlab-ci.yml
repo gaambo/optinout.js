@@ -23,7 +23,7 @@ test:
 publish:
   stage: deploy
   only:
-    - tags
+    - master
     - triggers
   script:
     - npm run build
