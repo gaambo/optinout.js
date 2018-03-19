@@ -1,5 +1,4 @@
 const Storage = (userOptions) => {
-
   const defaultOptions = {
     namespace: 'optInOut',
     expiration: Infinity,
@@ -8,21 +7,20 @@ const Storage = (userOptions) => {
     secure: false,
   };
 
-  let options = Object.assign({}, defaultOptions, userOptions);
+  const options = Object.assign({}, defaultOptions, userOptions);
 
-  let getNamespacedKey = (key) => {
-    return key ? options.namespace + '.' + key : options.namespace;
+  const getNamespacedKey = (key) => { // eslint-disable-line arrow-body-style
+    return key ? `${options.namespace}.${key}` : options.namespace;
   };
 
-  let storageAvailable = (() => {
+  const storageAvailable = (() => {
     try {
       const testKey = '__storage_test__';
       const testValue = testKey;
-      localStorage.setItem(testKey, testKey);
+      localStorage.setItem(testKey, testValue);
       localStorage.removeItem(testKey);
       return true;
-    }
-    catch (e) {
+    } catch (e) {
       return e instanceof DOMException && (
         // everything except Firefox
         e.code === 22 ||
@@ -38,67 +36,59 @@ const Storage = (userOptions) => {
     }
   })();
 
-  let getItem = (service, key) => {
-    if(storageAvailable) {
-      let data; 
+  const getItem = (service, key) => {
+    if (storageAvailable) {
+      let data;
       try {
         data = JSON.parse(localStorage.getItem(getNamespacedKey(service)));
-      } catch(err) {
-        data = null; 
+      } catch (err) {
+        data = null;
       }
-      if(key) {
-        return data[key] || null; 
-      } else {
-        return data || null; 
+      if (key) {
+        return data[key] || null;
       }
+      return data || null;
     }
 
-    return null; 
+    return null;
   };
 
-  let setItem = (service,key,value,update) => {
-    if(storageAvailable) {
-      let currentValue = getItem(service) || {}; 
-      if(update) {
-        let newData = { [key] : value };
-        value = Object.assign(currentValue, newData); 
+  const setItem = (service, key, value, update) => {
+    if (storageAvailable) {
+      const currentValue = getItem(service) || {};
+      let newValue;
+      if (update) {
+        const newData = { [key]: value };
+        newValue = Object.assign(currentValue, newData);
       } else {
-        value = currentValue;
-        value[key] = value; 
+        newValue = currentValue;
+        newValue[key] = value;
       }
-      localStorage.setItem(getNamespacedKey(service), JSON.stringify(value));
+      localStorage.setItem(getNamespacedKey(service), JSON.stringify(newValue));
       return true;
-    } else {
-      return false; 
     }
+    return false;
   };
 
-  let removeItem = (service,key) => {
-    if(storageAvailable) {
-      if(key) {
-        let currentValue = getItem(service) || {}; 
-        delete currentValue[key]; 
-        setItem(service,key,currentValue,false); //force overwrite
+  const removeItem = (service, key) => {
+    if (storageAvailable) {
+      if (key) {
+        const currentValue = getItem(service) || {};
+        delete currentValue[key];
+        setItem(service, key, currentValue, false); // force overwrite
       } else {
         localStorage.removeItem(getNamespacedKey(service));
       }
-      return true; 
-    } else {
-      return false; 
+      return true;
     }
+    return false;
   };
 
   return {
-    get: (service,key = false) => {
-      return getItem(service,key); 
-    },
-    set: (service,key,value,update = true) => {
-      return setItem(service,key,value,update);
-    },
-    delete: (service,key = false) => {
-      return removeItem(service,key);
-    }
+    get: (service, key = false) => getItem(service, key),
+    set: (service, key, value, update = true) => setItem(service, key, value, update),
+    delete: (service, key = false) => removeItem(service, key),
   };
 };
 
-export default Storage; 
+export default Storage;

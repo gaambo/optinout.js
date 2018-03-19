@@ -1,57 +1,49 @@
-const Storage = (data) => {
+const Storage = (userData) => {
+  const data = Object.assign({}, userData);
 
-  data = Object.assign({}, data);
-
-  let getItem = (service,key) => {
-    if(key) {
+  const getItem = (service, key) => {
+    if (key) {
       return data[service][key] || null;
-    } else {
-      return data[service] || null;
     }
+    return data[service] || null;
   };
 
-  let setItem = (service,key,value,update) => {
-    let currentValue = getItem(service) || {}; 
-    if(update) {
-      let newData = { [key] : value }; 
-      value = Object.assign(currentValue, newData); 
+  const setItem = (service, key, value, update) => {
+    const currentValue = getItem(service) || {};
+    let newValue;
+    if (update) {
+      const newData = { [key]: value };
+      newValue = Object.assign(currentValue, newData);
     } else {
-      value = currentValue;
-      value[key] = value; 
+      newValue = currentValue;
+      newValue[key] = value;
     }
-    data[service] = value; 
-    return true; 
+    data[service] = newValue;
+    return true;
   };
 
-  let removeItem = (service,key) => {
-    if(key) {
-      delete data[service][key]; 
+  const removeItem = (service, key) => {
+    if (key) {
+      delete data[service][key];
     } else {
-      delete data[service]; 
+      delete data[service];
     }
-    return true; 
+    return true;
   };
 
-  let hasItem = (service,key) => {
-    if(key) {
-      return ( (service in data) && (key in data[service]) ); 
-    } else {
-      return (service in data); 
+  const hasItem = (service, key) => { // eslint-disable-line no-unused-vars
+    if (key) {
+      return ((service in data) && (key in data[service]));
     }
-  }
+    return (service in data);
+  };
 
   return {
-    get: (service,key) => {
-      return getItem(service,key);
-    },
-    set: (service,key,value,update) => {
-      return setItem(service,key,value,update);
-    },
-    delete: (service,key) => {
-      return removeItem(service,key);
-    },
+    get: (service, key) => getItem(service, key),
+    set: (service, key, value, update) => setItem(service, key, value, update),
+    delete: (service, key) => removeItem(service, key),
     getData: () => data,
   };
 };
 
-export default Storage; 
+export default Storage;
