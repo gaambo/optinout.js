@@ -16,7 +16,7 @@ test:lint:
 
 test:
   script:
-    - npm ci
+    - npm install
     - npm run build
     - npm test
 
