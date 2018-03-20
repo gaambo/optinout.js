@@ -31,4 +31,5 @@ publish:
     #- npm publish
   artifacts: 
     paths:
+      - src
       - dist
