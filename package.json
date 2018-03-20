@@ -14,7 +14,7 @@
     "unit-test": "jest",
     "browser-test": "testcafe 'chrome' test/browser/",
     "test-server": "node test/index.js",
-    "postversion": "git push --folow-tags"
+    "postversion": "git push --follow-tags"
   },
   "repository": "gitlab:optinout/optinout.js",
   "author": "fabian todt",
