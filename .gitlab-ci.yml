@@ -24,6 +24,7 @@ publish:
   stage: deploy
   only:
     - master
+    - tags
     - triggers
   script:
     - npm run build
