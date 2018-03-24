@@ -6,7 +6,7 @@ const pkg = require('../package.json');
 const name = 'OptInOut';
 
 const browserConfig = {
-  input: 'src/index.js',
+  input: 'src/browser.js',
   plugins: [
     resolve(), // so Rollup can find `ms`
     commonjs(), // so Rollup can convert `ms` to an ES module
@@ -18,7 +18,7 @@ const browserConfig = {
 };
 
 const moduleConfig = {
-  input: 'src/index.js',
+  input: 'src/main.js',
   external: [],
   plugins: [
     babel({

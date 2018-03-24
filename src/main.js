@@ -1,13 +1,11 @@
 import cookieStorage from './storages/cookie';
 import localStorage from './storages/localStorage';
 import dataStorage from './storages/data';
-import gtmPlugin from './plugins/gtm';
-import linkPlugin from './plugins/link';
 
 // storage needs to have get & set methods
 // service needs to have mode (optIn|optOut)
 
-const OptInOut = (userOptions) => {
+const optInOut = (userOptions) => {
   const self = {};
 
   const defaultOptions = {
@@ -32,7 +30,7 @@ const OptInOut = (userOptions) => {
   // PRIVATE METHODS
 
   const setValueInStorages = (serviceKey, key, value, storageKey = false, update = true) => {
-    if (!services[serviceKey]) throw new Error(`service ${serviceKey} is not configured for OptInOut`);
+    if (!services[serviceKey]) throw new Error(`service ${serviceKey} is not configured for optInOut`);
 
     if (storageKey && storages[storageKey]) {
       storages[storageKey].set(serviceKey, key, value);
@@ -175,46 +173,7 @@ const OptInOut = (userOptions) => {
     }
   });
 
-
-  OptInOut.instance = self;
   return self;
 };
 
-// set global accessable methods
-OptInOut.isAllowed = (service, storage) => {
-  if (OptInOut.instance !== undefined) {
-    return OptInOut.instance.isAllowed(service, storage);
-  }
-  return null;
-};
-
-OptInOut.optIn = (service, storage) => {
-  if (OptInOut.instance !== undefined) {
-    return OptInOut.instance.optIn(service, storage);
-  }
-  return null;
-};
-
-OptInOut.optOut = (service, storage) => {
-  if (OptInOut.instance !== undefined) {
-    return OptInOut.instance.optOut(service, storage);
-  }
-  return null;
-};
-
-// set global accessable/namespaced storageadapters
-const storageAdapters = {
-  cookieStorage,
-  localStorage,
-  dataStorage,
-};
-OptInOut.storageAdapters = storageAdapters;
-
-// set global accessable/namespaced plugins
-const plugins = {
-  gtmPlugin,
-  linkPlugin,
-};
-OptInOut.plugins = plugins;
-
-export default OptInOut;
+export default optInOut;
