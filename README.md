@@ -81,14 +81,14 @@ Default:
     }
 
 The storages to save the optIn & optOut information. The order is important: It defines the priority/order in which the storages are asked for information when checking if something is allowed. 
-For further information about the storage API and the default used storages see storages [below](#storages).
+For further information about the storage API and the default used storages see storages [below](#storages-1).
 ### plugins
 *Optional*
 Type: `array` of plugin objects
 Default: `[]`
 
 Plugins which can listen for events triggered by this library or (possible in the future) can change how certain methods work. 
-For further information see the plugins api [below](#plugins).
+For further information see the plugins api [below](#plugins-1).
 ### doNotTrack
 Type: `boolean`
 Default: `false`
