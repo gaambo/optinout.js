@@ -23,7 +23,7 @@ const GTM = (userOptions) => {
   };
 
   const init = (optInOut) => {
-    optInOut.on('optin', eventCallback);
+    optInOut.on('optIn', eventCallback);
     optInOut.on('optOut', eventCallback);
   };
 
