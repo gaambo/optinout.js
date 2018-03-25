@@ -1,10 +1,6 @@
 const Storage = (userOptions) => {
   const defaultOptions = {
     namespace: 'optInOut',
-    expiration: Infinity,
-    domain: false,
-    path: false,
-    secure: false,
   };
 
   const options = Object.assign({}, defaultOptions, userOptions);
