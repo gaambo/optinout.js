@@ -2,6 +2,8 @@ import cookieStorage from './storages/cookie';
 import localStorage from './storages/localStorage';
 import dataStorage from './storages/data';
 
+import doNotTrack from './helper/doNotTrack';
+
 // storage needs to have get & set methods
 // service needs to have mode (optIn|optOut)
 
@@ -18,6 +20,7 @@ const optInOut = (userOptions) => {
 
     },
     plugins: [],
+    doNotTrack: false,
   };
 
   // PRIVATE PROPERTIES
@@ -131,8 +134,18 @@ const optInOut = (userOptions) => {
       return true;
     });
 
-    if (allowed === null) { // need to use default value
-      allowed = service.default ? service.default : (service.mode !== 'optIn');
+    const defaultAllowed = service.default ? service.default : (service.mode !== 'optIn');
+
+    if (allowed === null) { // use do not track or default
+      if (options.doNotTrack) {
+        if (doNotTrack()) {
+          allowed = false;
+        } else {
+          allowed = defaultAllowed;
+        }
+      } else {
+        allowed = defaultAllowed;
+      }
     }
 
     return allowed;
