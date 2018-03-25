@@ -1,4 +1,7 @@
-import { default as optInOut } from '../../src/index';
+import optInOut from '../../src/main';
+import cookieStorage from '../../src/storages/cookie';
+
+const emptyOptions = { plugins: [], doNotTrack: false };
 
 test("initialisationEmpty", () => {
   let obj = optInOut({
@@ -6,21 +9,21 @@ test("initialisationEmpty", () => {
     services: {}
   });
 
-  expect(obj.getOptions()).toEqual({ plugins: [] });
+  expect(obj.getOptions()).toEqual(emptyOptions);
   expect(obj.getServices()).toEqual({});
   expect(obj.getStorages()).toEqual({});
 });
 
 test("initialisationStorages", () => {
   let storages = {
-    cookie: optInOut.storageAdapters.cookieStorage()
+    cookie: cookieStorage()
   };
   let obj = optInOut({
     storages,
     services: {}
   });
 
-  expect(obj.getOptions()).toEqual({ plugins: [] });
+  expect(obj.getOptions()).toEqual(emptyOptions);
   expect(obj.getServices()).toEqual({});
   expect(obj.getStorages()).toEqual(storages);
 });
@@ -34,7 +37,7 @@ test("initialisationServices", () => {
     services
   });
 
-  expect(obj.getOptions()).toEqual({ plugins: [] });
+  expect(obj.getOptions()).toEqual(emptyOptions);
   expect(obj.getServices()).toEqual(services);
   expect(obj.getStorages()).toEqual({});
 });
