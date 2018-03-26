@@ -44,14 +44,14 @@ Default:
     }
 
 The storages to save the optIn & optOut information. The order is important: It defines the priority/order in which the storages are asked for information when checking if something is allowed. 
-For further information about the storage API and the default used storages see storages [below](#storages).
+For further information about the storage API and the default used storages see storages [below](#storages-1).
 ### plugins
 *Optional*
 Type: `array` of plugin objects
 Default: `[]`
 
 Plugins which can listen for events triggered by this library or (possible in the future) can change how certain methods work. 
-For further information see the plugins api [below](#plugins).
+For further information see the plugins api [below](#plugins-1).
 ### doNotTrack
 Type: `boolean`
 Default: `false`
@@ -175,6 +175,13 @@ The DOM element can/must have the following **data attributes**:
 	 - This gets prepend to all events pushed to dataLayer (e.g.: `namyNamespace.optIn` instead of `optIn`)
 
 At the moment this plugin just sends the optIn and optOut events to GTM. For information how to get the optIn & optOut status via GTM and use it to enable tags see the GTM Tutorial [below](#google-tag-manager-gtm). 
+
+#### Reload
+**Callable** via: 
+ - Browser: `OptInOut.plugins.reloadPLugin()`
+ - Module: `src/plugins/reload`
+
+Reloads the page after opting in or out. This is useful when you want to reload tracking scripts. You should therefore check if the user has opted in/out on the server. An alternative is to add the tracking scripts dynamically via javascript.
 
 ### API
 Plugins need to define a public callable `init` method which will be called by the library upon intialisation. The init method will get a reference to the library and can subscribe to events via the `on` method like so: 

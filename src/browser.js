@@ -3,6 +3,7 @@ import localStorage from './storages/localStorage';
 import dataStorage from './storages/data';
 import gtmPlugin from './plugins/gtm';
 import linkPlugin from './plugins/link';
+import reloadPlugin from './plugins/reload';
 import OptInOut from './main';
 
 // wrapper around module so we can set static methods
@@ -46,6 +47,7 @@ optInOut.storageAdapters = storageAdapters;
 const plugins = {
   gtmPlugin,
   linkPlugin,
+  reloadPlugin,
 };
 optInOut.plugins = plugins;
 
