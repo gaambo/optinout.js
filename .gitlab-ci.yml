@@ -28,8 +28,8 @@ publish:
     - triggers
   script:
     - npm run build
-    #- echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}'>.npmrc
-    #- npm publish
+    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}'>.npmrc
+    - npm publish
   artifacts: 
     paths:
       - src
