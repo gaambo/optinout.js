@@ -88,7 +88,7 @@ const optInOut = (userOptions) => {
     events[event] = handlers;
   };
 
-  self.isAllowed = (serviceKey, storageKey) => {
+  self.isAllowed = (serviceKey, storageKey = false) => {
     let service;
     let checkStorages;
     if (serviceKey && services[serviceKey]) {
