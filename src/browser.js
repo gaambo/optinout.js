@@ -35,6 +35,13 @@ optInOut.optOut = (service, storage) => {
   return null;
 };
 
+optInOut.getInstance = () => {
+  if (optInOut.instance !== undefined) {
+    return optInOut.instance;
+  }
+  return null;
+};
+
 // set global accessable/namespaced storageadapters
 const storageAdapters = {
   cookieStorage,

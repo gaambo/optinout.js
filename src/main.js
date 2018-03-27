@@ -51,7 +51,7 @@ const optInOut = (userOptions) => {
     }
 
     handlers.forEach((handler) => {
-      handler.call(self, [data, event]);
+      handler.call(self, data, event);
     });
   };
 
@@ -181,7 +181,7 @@ const optInOut = (userOptions) => {
   // init plugins
   events = {};
   options.plugins.forEach((plugin) => {
-    if (typeof plugin.init !== 'function') {
+    if (typeof plugin.init === 'function') {
       plugin.init(self);
     }
   });

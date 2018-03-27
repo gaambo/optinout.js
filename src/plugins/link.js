@@ -1,7 +1,7 @@
 const LinkHelper = (userOptions) => {
   const defaultOptions = {
     optInClickSelector: '.optInOut-optIn',
-    optOutClickSelector: '.optOut-optOut',
+    optOutClickSelector: '.optInOut-optOut',
   };
 
   const options = Object.assign({}, defaultOptions, userOptions);
