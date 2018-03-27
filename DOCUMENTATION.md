@@ -208,4 +208,23 @@ The following events are triggered & published by the library:
 		 - service: the service key
 		 - storage: the storage key
 		 - date: the date set
-		 
+
+# Source & Building
+You can install this package with npm (coming soon) or by downloading the current release of this repository. You have to build the files yourself. We're using gulp & rollup for building the dist-files, which creates IIFE, UMD, CommonJS and ES modules.
+
+The following **gulp tasks** are available: 
+
+ - `default` is the build task
+ - `build` cleans the dist directory and builds & minifies the dist-files
+ - `rollup` creates the dist module files via rollup
+ - `minify` minifies the files in dist directory
+
+The following **npm scripts** are available: 
+
+ - `build` runs `gulp build`
+ - `lint` runs eslint on source directory
+ - `test` runs `unit-test`
+ - `unit-test` runs jest unit-tests
+ - `browser-test` runs testcafe browser-tests
+ - `test-server` starts a simple http server serving a basic html file with the library included for testing
+ - `postversion` runs `git push --follow-tags` for pushing tags to git after running npm version
