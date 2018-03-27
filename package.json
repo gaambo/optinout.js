@@ -51,7 +51,10 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "files": [
-    "dist"
+    "src",
+    "dist",
+    "examples",
+    "DOCUMENTATION.md"
   ],
   "jest": {
     "collectCoverage": true,
