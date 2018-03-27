@@ -55,7 +55,25 @@ For further information about the options see the (documentation)[Documentation.
 See the (Snippets)[https://gitlab.com/optinout/optinout.js/snippets] for examples on how to check cookies, doNotTrack and query-strings in **PHP** on server side.
 
 ## Google Tag Manager (GTM)
-coming soon
+You can include the library directly on your site or just paste the minified version in an custom HTML tag (surrounded by `<script></script>`).
+
+Create a variable of type Custom JavaScript for each service you want to controll and set its code like so: 
+```
+function() {
+  if(OptInOut !== undefined) {
+    return OptInOut.isAllowed('facebook');
+  }
+}
+```
+This variable always has the value whether tracking for this service is allowed or not. You can use this in conditional triggers.
+
+#### Exclude Trigger
+You can create a new trigger of type Custom Event, then turn on matching by RegEx and set the event name to `.*`. Then filter the events for the variable created above containing `true` or `false`.
+
+You can use this trigger as an exclude trigger with any other triggers/events.
+
+#### Certain Trigger
+You can create a certain trigger (e.g. pageview trigger) and filter it for the variable created above containing `true` or `false`.
 
 # Source & Building
 You can install this package with npm (coming soon) or by downloading the current release of this repository. You have to build the files yourself. We're using gulp & rollup for building the dist-files, which creates IIFE, UMD, CommonJS and ES modules.
