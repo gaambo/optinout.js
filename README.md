@@ -74,3 +74,12 @@ You can use this trigger as an exclude trigger with any other triggers/events.
 
 #### Certain Trigger
 You can create a certain trigger (e.g. pageview trigger) and filter it for the variable created above containing `true` or `false`.
+
+# Legal Notice
+We will never give any legal (binding) advice on how to use tracking, scripts and embed on your page or other information regarding privacy settings on our page.
+You should see **OptInOut** as a tool to execute the privacy settings you need to have on your page. If you need further advice please consult a lawyer.
+
+# Thanks
+There were many inspring posts which led to the creation of OptInOut. Below you'll find a list of sources we find interesting to read if you're interested in the topic: 
+- (FB Pixel Controller by Oscar/@ovl)[https://medium.com/@ovl/facebook-pixel-und-datenschutz-24d9edceacff] (german)
+- (Info on how to use tracking with regards to privacy by Dr. Schwenke)[https://drschwenke.de/facebook-pixel-voraussetzungen-fuer-einen-rechtssicheren-einsatz/] (german)  
