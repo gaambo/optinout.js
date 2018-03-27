@@ -13,7 +13,8 @@
     "test": "npm run unit-test",
     "unit-test": "jest",
     "browser-test": "testcafe 'chrome' test/browser/",
-    "test-server": "node test/index.js",
+    "test-server": "node test/server.js",
+    "example-server": "node examples/server.js",
     "postversion": "git push --follow-tags"
   },
   "repository": "gitlab:optinout/optinout.js",
