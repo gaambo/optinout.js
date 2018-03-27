@@ -20,16 +20,23 @@ test:
     - npm run build
     - npm test
 
-publish:
+publish:artifacts:
   stage: deploy
   only:
     - master
   script:
     - npm run build
-    - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
-    - npm publish
   artifacts: 
     name: "optinout.js - $CI_COMMIT_REF_NAME"
     paths:
       - src
       - dist
+
+publish:npm:
+  stage: deploy
+  only: 
+    - /^v-.*$/
+  script:
+    - npm run build
+    - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+    - npm publish

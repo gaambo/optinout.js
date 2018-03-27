@@ -210,7 +210,7 @@ The following events are triggered & published by the library:
 		 - date: the date set
 
 # Source & Building
-You can install this package with npm (coming soon) or by downloading the current release of this repository. You have to build the files yourself. We're using gulp & rollup for building the dist-files, which creates IIFE, UMD, CommonJS and ES modules.
+You can install this package with [npm](https://www.npmjs.com/package/optinout.js) or by downloading the [latest release](https://gitlab.com/optinout/optinout.js/-/jobs/artifacts/master/download?job=publish) of this repository. You have to build the files yourself. We're using gulp & rollup for building the dist-files, which creates IIFE, UMD, CommonJS and ES modules.
 
 The following **gulp tasks** are available: 
 

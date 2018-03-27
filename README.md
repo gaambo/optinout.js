@@ -1,10 +1,13 @@
 # OptInOut.js
 
 A simple JavaScript library to manage opting in & out of tracking/marketing/mailing - in fact whatever you want to manage. This was specifically created for the EU GDPR. 
-To get started, check out the documentation below. Examples & snippets are coming soon.
+To get started, check out the quick start below, the [documentation](DOCUMENTATION.md) or the examples in the `examples` directory.
 # Quick Start
 ## Install
 You can download the [latest release here](https://gitlab.com/optinout/optinout.js/-/jobs/artifacts/master/download?job=publish).  This includes the src & dist directory. 
+
+There's also a [npm package](https://www.npmjs.com/package/optinout.js);
+
 ## Load
 ### Static HTML
 For usage in standard websites with best browser coverage we recommend including the `dist/optinout.js` or `dist/optinout.min.js`.
@@ -48,7 +51,7 @@ The most important methods the object (returned by the main initialization funct
 
 For quick reference and usage in tag managers the `OptInOut`-Function-Object also offers these three methods as "static" methods which get called on the current instance.
 
-For further information about the options see the (documentation)[Documentation.md].
+For further information about the options see the [documentation](Documentation.md).
 
 # Tutorials
 # Ideas 
@@ -57,7 +60,7 @@ You can use this library not only for opting in and out of tracking scripts but 
 	- Embedding Google Maps
  
 ## Server Side
-See the (Snippets)[https://gitlab.com/optinout/optinout.js/snippets] for examples on how to check cookies, doNotTrack and query-strings in **PHP** on server side.
+See the [Snippets](https://gitlab.com/optinout/optinout.js/snippets) for examples on how to check cookies, doNotTrack and query-strings in **PHP** on server side.
 
 ## Google Tag Manager (GTM)
 You can include the library directly on your site or just paste the minified version in an custom HTML tag (surrounded by `<script></script>`).
@@ -86,5 +89,5 @@ You should see **OptInOut** as a tool to execute the privacy settings you need t
 
 # Thanks
 There were many inspring posts which led to the creation of OptInOut. Below you'll find a list of sources we find interesting to read if you're interested in the topic: 
-- (FB Pixel Controller by Oscar/@ovl)[https://medium.com/@ovl/facebook-pixel-und-datenschutz-24d9edceacff] (german)
-- (Info on how to use tracking with regards to privacy by Dr. Schwenke)[https://drschwenke.de/facebook-pixel-voraussetzungen-fuer-einen-rechtssicheren-einsatz/] (german)  
+- [FB Pixel Controller by Oscar/@ovl](https://medium.com/@ovl/facebook-pixel-und-datenschutz-24d9edceacff) (german)
+- [Info on how to use tracking with regards to privacy by Dr. Schwenke](https://drschwenke.de/facebook-pixel-voraussetzungen-fuer-einen-rechtssicheren-einsatz/) (german)  
