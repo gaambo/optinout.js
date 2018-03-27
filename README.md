@@ -51,6 +51,9 @@ For quick reference and usage in tag managers the `OptInOut`-Function-Object als
 For further information about the options see the (documentation)[Documentation.md].
 
 # Tutorials
+## Server Side
+See the (Snippets)[https://gitlab.com/optinout/optinout.js/snippets] for examples on how to check cookies, doNotTrack and query-strings in **PHP** on server side.
+
 ## Google Tag Manager (GTM)
 coming soon
 
