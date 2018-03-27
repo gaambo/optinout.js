@@ -51,6 +51,11 @@ For quick reference and usage in tag managers the `OptInOut`-Function-Object als
 For further information about the options see the (documentation)[Documentation.md].
 
 # Tutorials
+# Ideas 
+You can use this library not only for opting in and out of tracking scripts but also for other things: 
+	- Embedding YouTube videos
+	- Embedding Google Maps
+ 
 ## Server Side
 See the (Snippets)[https://gitlab.com/optinout/optinout.js/snippets] for examples on how to check cookies, doNotTrack and query-strings in **PHP** on server side.
 
