@@ -24,13 +24,12 @@ publish:
   stage: deploy
   only:
     - master
-    - tags
-    - triggers
   script:
     - npm run build
     - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
     - npm publish
   artifacts: 
+    name: "optinout.js - $CI_COMMIT_REF_NAME"
     paths:
       - src
       - dist

@@ -4,7 +4,7 @@ A simple JavaScript library to manage opting in & out of tracking/marketing/mail
 To get started, check out the documentation below. Examples & snippets are coming soon.
 # Quick Start
 ## Install
-You can download the [latest release here](https://gitlab.com/optinout/optinout.js/tags).  This includes the src & dist directory. 
+You can download the [latest release here](https://gitlab.com/optinout/optinout.js/-/jobs/artifacts/master/download?job=publish).  This includes the src & dist directory. 
 ## Load
 ### Static HTML
 For usage in standard websites with best browser coverage we recommend including the `dist/optinout.js` or `dist/optinout.min.js`.

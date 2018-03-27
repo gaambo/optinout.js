@@ -1,6 +1,6 @@
 {
   "name": "optinout.js",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "a simple js framework for handling opt-in and opt-out for tracking & cookies",
   "main": "dist/optinout.js",
   "jsnext:main": "src/index.js",
@@ -51,7 +51,10 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "files": [
-    "dist"
+    "src",
+    "dist",
+    "examples",
+    "DOCUMENTATION.md"
   ],
   "jest": {
     "collectCoverage": true,
