@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <script src="../dist/optinout.js"></script>
+
+        <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-KJWBZRK');</script>
+        <!-- End Google Tag Manager -->
+    </head>
+    <body>
+        <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KJWBZRK"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <h2>Facebook</h2>
+        <button class="optInOut-optIn" data-service="facebook">OptIn</button>
+        <button class="optInOut-optOut" data-service="facebook">OptOut</button>
+    <h2>Analytics</h2>
+    <button class="optInOut-optIn" data-service="analytics">OptIn</button>
+        <button class="optInOut-optOut" data-service="analytics">OptOut</button>
+    <h2>Control</h2>
+    <button class="delete">Delete Data</button>
+
+        <script>
+                var debug = {
+                    init: function(lib) {
+                        lib.on('optIn', function(data) { console.log(data) });
+                        lib.on('optOut', function(data) { console.log(data) });
+                    },
+                };
+                var oio = OptInOut({
+                    services: {
+                        facebook: { mode: 'optIn' },
+                        analytics: { mode: 'optOut' },
+                    },
+                    plugins: [
+                        OptInOut.plugins.linkPlugin(),
+                        OptInOut.plugins.gtmPlugin(),
+                        debug
+                    ]
+                });
+
+                var deleteButton = document.querySelector('.delete');
+                deleteButton.addEventListener('click', function(event) {
+                    oio.getStorages().forEach(function(storage) {
+                        if(storage.delete) {
+                            storage.delete('facebook');
+                            storage.delete('analytics');
+                        }
+                    });
+                });
+            </script>
+    </body>
+</html>
