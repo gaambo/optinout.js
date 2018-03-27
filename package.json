@@ -1,6 +1,6 @@
 {
   "name": "optinout.js",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "a simple js framework for handling opt-in and opt-out for tracking & cookies",
   "main": "dist/optinout.js",
   "jsnext:main": "src/index.js",
