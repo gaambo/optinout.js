@@ -27,7 +27,7 @@ publish:artifacts:
   script:
     - npm run build
   artifacts: 
-    name: "optinout.js - $CI_COMMIT_REF_NAME"
+    name: "optinout.js-$CI_COMMIT_REF_NAME"
     paths:
       - src
       - dist
