@@ -27,7 +27,7 @@ publish:artifacts:
   script:
     - npm run build
   artifacts: 
-    name: "optinout.js - $CI_COMMIT_REF_NAME"
+    name: "optinout.js-$CI_COMMIT_REF_NAME"
     paths:
       - src
       - dist
@@ -35,7 +35,7 @@ publish:artifacts:
 publish:npm:
   stage: deploy
   only: 
-    - /^v-.*$/
+    - master
   script:
     - npm run build
     - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
