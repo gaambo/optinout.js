@@ -1,0 +1,403 @@
+{
+    "exportFormatVersion": 2,
+    "exportTime": "2018-03-30 14:17:36",
+    "containerVersion": {
+        "path": "accounts/2818381089/containers/8708154/versions/0",
+        "accountId": "2818381089",
+        "containerId": "8708154",
+        "containerVersionId": "0",
+        "container": {
+            "path": "accounts/2818381089/containers/8708154",
+            "accountId": "2818381089",
+            "containerId": "8708154",
+            "name": "examples.getoptinout.io",
+            "publicId": "GTM-KJWBZRK",
+            "usageContext": [
+                "WEB"
+            ],
+            "fingerprint": "1522418834701",
+            "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/2818381089/containers/8708154/workspaces?apiLink=container"
+        },
+        "tag": [
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "tagId": "1",
+                "name": "Debug",
+                "type": "html",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "html",
+                        "value": "<script>\n  console.log('facebook: ' + {{Facebook OptInOut Allowed}});\n  console.log('analytics: ' + {{Analytics OptInOut Allowed}});\n</script>"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "supportDocumentWrite",
+                        "value": "false"
+                    }
+                ],
+                "fingerprint": "1522165761765",
+                "firingTriggerId": [
+                    "2147479553"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT"
+            },
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "tagId": "2",
+                "name": "FBP Base",
+                "type": "html",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "html",
+                        "value": "<!-- Facebook Pixel Code -->\n<script>\n  !function(f,b,e,v,n,t,s)\n  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?\n  n.callMethod.apply(n,arguments):n.queue.push(arguments)};\n  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';\n  n.queue=[];t=b.createElement(e);t.async=!0;\n  t.src=v;s=b.getElementsByTagName(e)[0];\n  s.parentNode.insertBefore(t,s)}(window, document,'script',\n  'https://connect.facebook.net/en_US/fbevents.js');\n  fbq('init', FBP_ID);\n  fbq('track', 'PageView');\n</script>\n<noscript><img height=\"1\" width=\"1\" style=\"display:none\"\n  src=\"https://www.facebook.com/tr?id=FBP_ID&ev=PageView&noscript=1\"\n/></noscript>\n<!-- End Facebook Pixel Code -->\n"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "supportDocumentWrite",
+                        "value": "false"
+                    }
+                ],
+                "fingerprint": "1522418527772",
+                "firingTriggerId": [
+                    "8",
+                    "2147479553"
+                ],
+                "blockingTriggerId": [
+                    "7"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT"
+            },
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "tagId": "3",
+                "name": "UA Base",
+                "type": "ua",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "overrideGaSettings",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "trackType",
+                        "value": "TRACK_PAGEVIEW"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "gaSettings",
+                        "value": "{{UA Settings}}"
+                    }
+                ],
+                "fingerprint": "1522418834701",
+                "firingTriggerId": [
+                    "2147479553"
+                ],
+                "blockingTriggerId": [
+                    "9"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT"
+            }
+        ],
+        "trigger": [
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "triggerId": "7",
+                "name": "FBP Not Allowed Exclude",
+                "type": "CUSTOM_EVENT",
+                "customEventFilter": [
+                    {
+                        "type": "MATCH_REGEX",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{_event}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": ".*"
+                            }
+                        ]
+                    }
+                ],
+                "filter": [
+                    {
+                        "type": "CONTAINS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{Facebook OptInOut Allowed}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "false"
+                            }
+                        ]
+                    }
+                ],
+                "fingerprint": "1522418641324"
+            },
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "triggerId": "8",
+                "name": "Facebook OptIn",
+                "type": "CUSTOM_EVENT",
+                "customEventFilter": [
+                    {
+                        "type": "EQUALS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{_event}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "optIn"
+                            }
+                        ]
+                    }
+                ],
+                "filter": [
+                    {
+                        "type": "CONTAINS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{OptInOut Service}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "facebook"
+                            }
+                        ]
+                    }
+                ],
+                "fingerprint": "1522418597223"
+            },
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "triggerId": "9",
+                "name": "UA Not Allowed Exclude",
+                "type": "CUSTOM_EVENT",
+                "customEventFilter": [
+                    {
+                        "type": "MATCH_REGEX",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{_event}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": ".*"
+                            }
+                        ]
+                    }
+                ],
+                "filter": [
+                    {
+                        "type": "CONTAINS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{Analytics OptInOut Allowed}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "false"
+                            }
+                        ]
+                    }
+                ],
+                "fingerprint": "1522418897567"
+            }
+        ],
+        "variable": [
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "variableId": "2",
+                "name": "Analytics OptInOut Allowed",
+                "type": "jsm",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "javascript",
+                        "value": "function() {\n  if(OptInOut !== undefined) {\n    return OptInOut.isAllowed('analytics');\n  }\n}"
+                    }
+                ],
+                "fingerprint": "1522418680574"
+            },
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "variableId": "1",
+                "name": "Facebook OptInOut Allowed",
+                "type": "jsm",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "javascript",
+                        "value": "function() {\n  if(OptInOut !== undefined) {\n    return OptInOut.isAllowed('facebook');\n  }\n}"
+                    }
+                ],
+                "fingerprint": "1522418689693"
+            },
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "variableId": "3",
+                "name": "OptInOut Service",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "service"
+                    }
+                ],
+                "fingerprint": "1522418517970"
+            },
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "variableId": "4",
+                "name": "UA Settings",
+                "type": "gas",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "cookieDomain",
+                        "value": "auto"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "doubleClick",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setTrackerName",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "useDebugVersion",
+                        "value": "false"
+                    },
+                    {
+                        "type": "LIST",
+                        "key": "fieldsToSet",
+                        "list": [
+                            {
+                                "type": "MAP",
+                                "map": [
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "fieldName",
+                                        "value": "anonymizeIp"
+                                    },
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "value",
+                                        "value": "1"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "useHashAutoLink",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "decorateFormsAutoLink",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableLinkId",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableEcommerce",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "trackingId",
+                        "value": ""
+                    }
+                ],
+                "fingerprint": "1522418822658"
+            }
+        ],
+        "builtInVariable": [
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "type": "PAGE_URL",
+                "name": "Page URL"
+            },
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "type": "PAGE_HOSTNAME",
+                "name": "Page Hostname"
+            },
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "type": "PAGE_PATH",
+                "name": "Page Path"
+            },
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "type": "REFERRER",
+                "name": "Referrer"
+            },
+            {
+                "accountId": "2818381089",
+                "containerId": "8708154",
+                "type": "EVENT",
+                "name": "Event"
+            }
+        ],
+        "fingerprint": "0",
+        "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/2818381089/containers/8708154/versions/0?apiLink=version"
+    }
+}
