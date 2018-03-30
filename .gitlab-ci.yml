@@ -23,7 +23,7 @@ test:
 publish:artifacts:
   stage: deploy
   only:
-    - master
+    - /^v-.*$/
   script:
     - npm run build
   artifacts: 
