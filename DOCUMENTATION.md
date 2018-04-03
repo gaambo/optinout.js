@@ -20,40 +20,40 @@ Each service is a **string key with an object value** which holds other service 
 The string key is used for opting user in & out and for checking if it's allowed.
 
 **Example**
-
-    OptInOut({
-	  services: {
-	    'facebook': {
-	      mode: 'optIn',
-		 }, 
-		 'analytics: {
-		   mode: 'optOut',
-		 },
-	  },
-    });
-
+```javascript
+OptInOut({
+  services: {
+    'facebook': {
+      mode: 'optIn',
+    }, 
+    'analytics': {
+      mode: 'optOut',
+    },
+  },
+});
+```
 ### storages
 *Optional*
-Type: `object` - string keys with storage objects as value
+Type: `object` - string keys with storage objects as value  
 Default:
-
-     {
-      cookie:  cookieStorage(),
-      localStorage:  localStorage(),
-      dataStorage:  dataStorage(),
-    }
-
+```javascript
+{
+  cookie:  cookieStorage(),
+  localStorage:  localStorage(),
+  dataStorage:  dataStorage(),
+}
+```
 The storages to save the optIn & optOut information. The order is important: It defines the priority/order in which the storages are asked for information when checking if something is allowed. 
 For further information about the storage API and the default used storages see storages [below](#storages-1).
 ### plugins
 *Optional*
-Type: `array` of plugin objects
+Type: `array` of plugin objects  
 Default: `[]`
 
 Plugins which can listen for events triggered by this library or (possible in the future) can change how certain methods work. 
 For further information see the plugins api [below](#plugins-1).
 ### doNotTrack
-Type: `boolean`
+Type: `boolean`  
 Default: `false`
 
 Defines if the browsers DoNotTrack option should be used. This will only be used if no optIn/optOut data is explicitly set (== as the default). 
@@ -108,16 +108,16 @@ Should have a structure like the following:
 	 - optedOut: Date
 
 **Example Data**:
-
-    {
-      'facebook': {
-        'optedIn': '2018-03-25',
-      },
-      'analytics': {
-        'optedOut': new Date('2018-03-25'),
-      },
-    }
-
+```javascript
+{
+  'facebook': {
+    'optedIn': '2018-03-25',
+  },
+  'analytics': {
+    'optedOut': new Date('2018-03-25'),
+  },
+}
+```
 ### API
 You can easily develop custom storage adapters (e.g. for data coming from server, ajax,...). Storage Adapters must provide the following public callable methods: 
 
@@ -185,11 +185,12 @@ Reloads the page after opting in or out. This is useful when you want to reload 
 
 ### API
 Plugins need to define a public callable `init` method which will be called by the library upon intialisation. The init method will get a reference to the library and can subscribe to events via the `on` method like so: 
-
-    const  init  = (optInOut) => {
-      optInOut.on('optIn', eventCallback);
-      optInOut.on('optOut', eventCallback);
-    };
+```javascript
+const  init  = (optInOut) => {
+  optInOut.on('optIn', eventCallback);
+  optInOut.on('optOut', eventCallback);
+};
+```
 Event callbacks get passed two arguments:
 
  - `data`: an object with all the data passed from the triggering method
