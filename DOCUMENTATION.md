@@ -17,7 +17,7 @@ Each service is a **string key with an object value** which holds other service 
 	 - Type: `boolean`
 	 - The default value for allowed
 
-The string key is used for opting user in & out and for asking if it's allowed.
+The string key is used for opting user in & out and for checking if it's allowed.
 
 **Example**
 
