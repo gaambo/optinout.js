@@ -10,8 +10,8 @@ Each service is a **string key with an object value** which holds other service 
 
  - `mode`: 
 	 - **Required**
-	 - Type: `String`
-	 - Allowed values: `optIn`, `optOut`
+	 - Type: `string`
+	 - Allowed values: `'optIn'`, `'optOut'`
  - `default`:
 	 - *Optional*
 	 - Type: `boolean`
@@ -68,7 +68,7 @@ This library includes storage adapters for saving/getting data from cookies, the
 **Options**:
  - namespace:
 	 - Type: `string`
-	 - Default: `optInOut`
+	 - Default: `'optInOut'`
 	 - Defines the namespace used for cookies
  - expiration:
 	 - Type: `Date`
@@ -93,7 +93,7 @@ This library includes storage adapters for saving/getting data from cookies, the
 **Options**:
  - namespace:
 	 - Type: `string`
-	 - Default: `optInOut`
+	 - Default: `'optInOut'`
 	 - Defines the namespace used for localStorage
 
 #### Data Storage
@@ -142,11 +142,11 @@ The library comes shipped with usefull plugins to handle opting in and out via b
 
  - optInClickSelector:
 	 - Type: `string`
-	 - Default: `.optInOut-optIn`
+	 - Default: `'.optInOut-optIn'`
 	 - The CSS selector for the optIn button
  - optOutClickSelector:
 	 - Type: `string`
-	 - Defualt: `.optInOut-optOut`
+	 - Defualt: `'.optInOut-optOut'`
 	 - The CSS selector for the optOut button
 
 The DOM element can/must have the following **data attributes**:
@@ -167,7 +167,7 @@ The DOM element can/must have the following **data attributes**:
 
  - dataLayerKey:
 	 - Type: `string`
-	 - Default: `dataLayer`
+	 - Default: `'dataLayer'`
 	 - The name of the dataLayer variable defined in the GTM configuration
  - eventNameSpace:
 	 - Type: `string` - `false` if should not be used
