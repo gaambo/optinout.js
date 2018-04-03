@@ -1,61 +1,46 @@
-const doAjaxCall = (url, options) => {
-
-};
+import basicDataStorage from './data';
 
 const Storage = (startData, userOptions) => {
-  const data = Object.assign({}, startData);
+  const dataStorage = basicDataStorage(startData);
 
   const defaultOptions = {
-    ajaxPath: false,
+    ajaxUrl: false,
     additionalData: false,
-    ajaxFunction: doAjaxCall,
+    ajaxFunction: null,
     ajaxOptions: {},
   };
 
   const options = Object.assign({}, defaultOptions, userOptions);
 
-  const getItem = (service, key) => {
-    if (key) {
-      return data[service][key] || null;
-    }
-    return data[service] || null;
-  };
-
   const setItem = (service, key, value, update) => {
-    const currentValue = getItem(service) || {};
-    let newValue;
-    if (update) {
-      const newData = { [key]: value };
-      newValue = Object.assign(currentValue, newData);
-    } else {
-      newValue = currentValue;
-      newValue[key] = value;
+    dataStorage.set(service, key, value, update);
+
+    const currentValue = dataStorage.get(service) || false;
+    if (options.ajaxFunction) {
+      const ajaxData = Object.assign({}, options.additionalData, {
+        service,
+        key,
+        value,
+        update,
+        currentValue,
+      });
+
+      options.ajaxFunction(options.ajaxUrl, ajaxData, options.ajaxOptions);
+      return true;
     }
-    data[service] = newValue;
-    return true;
+    return false;
   };
 
   const removeItem = (service, key) => {
-    if (key) {
-      delete data[service][key];
-    } else {
-      delete data[service];
-    }
-    return true;
-  };
-
-  const hasItem = (service, key) => { // eslint-disable-line no-unused-vars
-    if (key) {
-      return ((service in data) && (key in data[service]));
-    }
-    return (service in data);
+    dataStorage.delete(service, key);
+    return setItem(service, key, null, false);
   };
 
   return {
-    get: (service, key) => getItem(service, key),
+    get: (service, key) => dataStorage.get(service, key),
     set: (service, key, value, update) => setItem(service, key, value, update),
     delete: (service, key) => removeItem(service, key),
-    getData: () => data,
+    getData: () => dataStorage.getData(),
   };
 };
 

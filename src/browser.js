@@ -1,6 +1,7 @@
 import cookieStorage from './storages/cookie';
 import localStorage from './storages/localStorage';
 import dataStorage from './storages/data';
+import ajaxDataStorage from './storages/data-ajax';
 import gtmPlugin from './plugins/gtm';
 import linkPlugin from './plugins/link';
 import reloadPlugin from './plugins/reload';
@@ -47,6 +48,7 @@ const storageAdapters = {
   cookieStorage,
   localStorage,
   dataStorage,
+  ajaxDataStorage,
 };
 optInOut.storageAdapters = storageAdapters;
 
