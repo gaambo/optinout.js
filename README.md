@@ -83,6 +83,9 @@ You can use this trigger as an exclude trigger with any other triggers/events.
 #### Certain Trigger
 You can create a certain trigger (e.g. pageview trigger) and filter it for the variable created above containing `true` or `false`.
 
+## Storing Optin & Optout Data
+You are responsible for storing the optin & optout data of users in an permanent storage for proofing their optin. The plugin does not handle this, as it only stores the data on the client side. But we ship an AJAX datastorage which makes it easy to send the data directly to a server/endpoint of your choice. Of course you can develop your own data storage to do this too.
+
 # Legal Notice
 We will never give any legal (binding) advice on how to use tracking, scripts and embed on your page or other information regarding privacy settings on our page.
 You should see **OptInOut** as a tool to execute the privacy settings you need to have on your page. If you need further advice please consult a lawyer.

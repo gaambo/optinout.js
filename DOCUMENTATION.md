@@ -10,50 +10,50 @@ Each service is a **string key with an object value** which holds other service 
 
  - `mode`: 
 	 - **Required**
-	 - Type: `string`
-	 - Allowed values: `'optIn'`, `'optOut'`
+	 - Type: `String`
+	 - Allowed values: `optIn`, `optOut`
  - `default`:
 	 - *Optional*
 	 - Type: `boolean`
 	 - The default value for allowed
 
-The string key is used for opting user in & out and for checking if it's allowed.
+The string key is used for opting user in & out and for asking if it's allowed.
 
 **Example**
-```javascript
-OptInOut({
-  services: {
-    'facebook': {
-      mode: 'optIn',
-    }, 
-    'analytics': {
-      mode: 'optOut',
-    },
-  },
-});
-```
+
+    OptInOut({
+	  services: {
+	    'facebook': {
+	      mode: 'optIn',
+		 }, 
+		 'analytics: {
+		   mode: 'optOut',
+		 },
+	  },
+    });
+
 ### storages
 *Optional*
-Type: `object` - string keys with storage objects as value  
+Type: `object` - string keys with storage objects as value
 Default:
-```javascript
-{
-  cookie:  cookieStorage(),
-  localStorage:  localStorage(),
-  dataStorage:  dataStorage(),
-}
-```
+
+     {
+      cookie:  cookieStorage(),
+      localStorage:  localStorage(),
+      dataStorage:  dataStorage(),
+    }
+
 The storages to save the optIn & optOut information. The order is important: It defines the priority/order in which the storages are asked for information when checking if something is allowed. 
 For further information about the storage API and the default used storages see storages [below](#storages-1).
 ### plugins
 *Optional*
-Type: `array` of plugin objects  
+Type: `array` of plugin objects
 Default: `[]`
 
 Plugins which can listen for events triggered by this library or (possible in the future) can change how certain methods work. 
 For further information see the plugins api [below](#plugins-1).
 ### doNotTrack
-Type: `boolean`  
+Type: `boolean`
 Default: `false`
 
 Defines if the browsers DoNotTrack option should be used. This will only be used if no optIn/optOut data is explicitly set (== as the default). 
@@ -68,7 +68,7 @@ This library includes storage adapters for saving/getting data from cookies, the
 **Options**:
  - namespace:
 	 - Type: `string`
-	 - Default: `'optInOut'`
+	 - Default: `optInOut`
 	 - Defines the namespace used for cookies
  - expiration:
 	 - Type: `Date`
@@ -93,7 +93,7 @@ This library includes storage adapters for saving/getting data from cookies, the
 **Options**:
  - namespace:
 	 - Type: `string`
-	 - Default: `'optInOut'`
+	 - Default: `optInOut`
 	 - Defines the namespace used for localStorage
 
 #### Data Storage
@@ -101,23 +101,79 @@ This library includes storage adapters for saving/getting data from cookies, the
  - Browser: `OptInOut.storageAdapters.dataStorage(data)`
  - Module: `src/storages/data`
 
-**Data** is the array which is used to get values from and set values to. 
+**data** is the array which is used to get values from and set values to. 
 Should have a structure like the following: 
  - serviceKey
 	 - optedIn: Date
 	 - optedOut: Date
 
 **Example Data**:
-```javascript
-{
-  'facebook': {
-    'optedIn': '2018-03-25',
-  },
-  'analytics': {
-    'optedOut': new Date('2018-03-25'),
-  },
-}
+
+    {
+      'facebook': {
+        'optedIn': '2018-03-25',
+      },
+      'analytics': {
+        'optedOut': new Date('2018-03-25'),
+      },
+    }
+
+#### AJAX-Data Storage
+Extends the [simple Data Storage](#data-storage) with AJAX set methods. It is meant to store the data asynchronously on the server. The data should come from the server upon loading the page. Getting Data/a key via AJAX is **not supported**.
+
+**Callable** via: 
+ - Browser: `OptInOut.storageAdapters.ajaxDataStorage(data, options)`
+ - Module: `src/storages/data-ajax`
+
+**data** is the array which is used to get values from and set values to. 
+Should have a structure like the following: 
+ - serviceKey
+	 - optedIn: Date
+	 - optedOut: Date
+	 - 
+
+**options:**
+ - ajaxUrl:
+	 - Type: `string`
+	 - Default: `false`
+	 - The URL to be called by the AJAX function
+- ajaxFunction:
+	 - Type: `function`
+	 - Default: `false`
+	 - The AJAX (wrapper-)function. Gets passed the following arguments:
+		- ajaxUrl
+		- ajaxData 
+			- keys: `service`, `key`, `value`, `update` (same as [storage-adapters set API](#api)
+		- ajaxOptions
+	 - See below for example.
+- ajaxOptions:
+	 - Type: `object`
+	 - Default: `{}`
+	 - Additional options that should be passed to the ajax function (like HTTP method)
+- additionalData:
+	 - Type: any
+	 - Default: `false`
+	 - Additional data that should be passed to the ajax function (like authorization,...)
+
+**Example Function**:
+Because of the arguments passed to the AJAX function it makes sense to wrap the real AJAX function (e.g. jQuerys `.ajax` function) in another function like so: 
 ```
+	function(ajaxUrl, ajaxData, ajaxOptions) {
+		ajaxOptions.data = ajaxData;
+		jQuery.ajax(ajaxUrl, ajaxOptions);
+	}
+```
+**Example Data**:
+
+    {
+      'facebook': {
+        'optedIn': '2018-03-25',
+      },
+      'analytics': {
+        'optedOut': new Date('2018-03-25'),
+      },
+    }
+
 ### API
 You can easily develop custom storage adapters (e.g. for data coming from server, ajax,...). Storage Adapters must provide the following public callable methods: 
 
@@ -142,11 +198,11 @@ The library comes shipped with usefull plugins to handle opting in and out via b
 
  - optInClickSelector:
 	 - Type: `string`
-	 - Default: `'.optInOut-optIn'`
+	 - Default: `.optInOut-optIn`
 	 - The CSS selector for the optIn button
  - optOutClickSelector:
 	 - Type: `string`
-	 - Defualt: `'.optInOut-optOut'`
+	 - Defualt: `.optInOut-optOut`
 	 - The CSS selector for the optOut button
 
 The DOM element can/must have the following **data attributes**:
@@ -167,7 +223,7 @@ The DOM element can/must have the following **data attributes**:
 
  - dataLayerKey:
 	 - Type: `string`
-	 - Default: `'dataLayer'`
+	 - Default: `dataLayer`
 	 - The name of the dataLayer variable defined in the GTM configuration
  - eventNameSpace:
 	 - Type: `string` - `false` if should not be used
@@ -185,12 +241,11 @@ Reloads the page after opting in or out. This is useful when you want to reload 
 
 ### API
 Plugins need to define a public callable `init` method which will be called by the library upon intialisation. The init method will get a reference to the library and can subscribe to events via the `on` method like so: 
-```javascript
-const  init  = (optInOut) => {
-  optInOut.on('optIn', eventCallback);
-  optInOut.on('optOut', eventCallback);
-};
-```
+
+    const  init  = (optInOut) => {
+      optInOut.on('optIn', eventCallback);
+      optInOut.on('optOut', eventCallback);
+    };
 Event callbacks get passed two arguments:
 
  - `data`: an object with all the data passed from the triggering method
