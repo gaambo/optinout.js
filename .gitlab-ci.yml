@@ -23,7 +23,7 @@ test:
 publish:artifacts:
   stage: deploy
   only:
-    - master
+    - /^v-.*$/
   script:
     - npm run build
   artifacts: 
@@ -35,8 +35,11 @@ publish:artifacts:
 publish:npm:
   stage: deploy
   only: 
-    - master
+    - /^v-.*$/
   script:
     - npm run build
     - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
     - npm publish
+  environment:
+    name: npm
+    url: https://www.npmjs.com/package/optinout.js
