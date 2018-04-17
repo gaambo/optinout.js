@@ -11,8 +11,8 @@ We use [Jest](https://facebook.github.io/jest/) for unit tests and [TestCafe](ht
 Please write tests for your code accordingly.
 
 ### Branches
-We try to base our branch model on the [branch model from Vincent Driessen](http://nvie.com/posts/a-successful-git-branching-model/). 
-Please create a new branch for developing new features, adding code, etc.
+We try to base our branch model on the [GitLab Flow Model](https://docs.gitlab.com/ee/workflow/gitlab_flow.html). 
+Please create a new branch for developing new features, adding code, etc. Please use issues, feature-branches and always branch of master / merge into master.
 
 ### Pull Requests
 You can submit pull requests and our masters will review and merge them if they are fit. Please reference the issue in the commit message.
