@@ -106,9 +106,14 @@ test("Optin after opting out - with optIn service - checks date", () => { //TODO
 
   expect(obj.isAllowed('facebook')).toBe(false);
 
-  obj.optIn('facebook');
+  //wait so time of optin and optout is not the same
+  setTimeout(() => {
+    obj.optIn('facebook');
 
   expect(obj.isAllowed('facebook')).toBe(true);
+  }, 1000); 
+
+  
 });
 
 test("Optout after opting in - with optIn service - checks date", () => {
@@ -168,9 +173,14 @@ test("Optout after opting in - with optOut service - checks date", () => {
   
   expect(obj.isAllowed('analytics')).toBe(true);
 
-  obj.optOut('analytics');
+  //wait so date of optin and optout is not the same
+  setTimeout(() => {
+    obj.optOut('analytics');
 
-  expect(obj.isAllowed('analytics')).toBe(false);
+    expect(obj.isAllowed('analytics')).toBe(false);
+  }, 1000);
+
+  
 });
 
 test("Optedin set to false explicitly", () => {
