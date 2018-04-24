@@ -23,7 +23,7 @@ test:
 publish:artifacts:
   stage: deploy
   only:
-    - /^v-.*$/
+    - /^v.*$/
   script:
     - npm run build
   artifacts: 
@@ -35,7 +35,7 @@ publish:artifacts:
 publish:npm:
   stage: deploy
   only: 
-    - /^v-.*$/
+    - /^v.*$/
   script:
     - npm run build
     - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
