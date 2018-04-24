@@ -101,12 +101,68 @@ This library includes storage adapters for saving/getting data from cookies, the
  - Browser: `OptInOut.storageAdapters.dataStorage(data)`
  - Module: `src/storages/data`
 
-**Data** is the array which is used to get values from and set values to. 
+**data** is the array which is used to get values from and set values to. 
 Should have a structure like the following: 
  - serviceKey
 	 - optedIn: Date
 	 - optedOut: Date
 
+**Example Data**:
+
+    {
+      'facebook': {
+        'optedIn': '2018-03-25',
+      },
+      'analytics': {
+        'optedOut': new Date('2018-03-25'),
+      },
+    }
+
+#### AJAX-Data Storage
+Extends the [simple Data Storage](#data-storage) with AJAX set methods. It is meant to store the data asynchronously on the server. The data should come from the server upon loading the page. Getting Data/a key via AJAX is **not supported**.
+
+**Callable** via: 
+ - Browser: `OptInOut.storageAdapters.ajaxDataStorage(data, options)`
+ - Module: `src/storages/data-ajax`
+
+**data** is the array which is used to get values from and set values to. 
+Should have a structure like the following: 
+ - serviceKey
+	 - optedIn: Date
+	 - optedOut: Date
+	 - 
+
+**options:**
+ - ajaxUrl:
+	 - Type: `string`
+	 - Default: `false`
+	 - The URL to be called by the AJAX function
+- ajaxFunction:
+	 - Type: `function`
+	 - Default: `false`
+	 - The AJAX (wrapper-)function. Gets passed the following arguments:
+		- ajaxUrl
+		- ajaxData 
+			- keys: `service`, `key`, `value`, `update` (same as [storage-adapters set API](#api)
+		- ajaxOptions
+	 - See below for example.
+- ajaxOptions:
+	 - Type: `object`
+	 - Default: `{}`
+	 - Additional options that should be passed to the ajax function (like HTTP method)
+- additionalData:
+	 - Type: any
+	 - Default: `false`
+	 - Additional data that should be passed to the ajax function (like authorization,...)
+
+**Example Function**:
+Because of the arguments passed to the AJAX function it makes sense to wrap the real AJAX function (e.g. jQuerys `.ajax` function) in another function like so: 
+```
+	function(ajaxUrl, ajaxData, ajaxOptions) {
+		ajaxOptions.data = ajaxData;
+		jQuery.ajax(ajaxUrl, ajaxOptions);
+	}
+```
 **Example Data**:
 
     {

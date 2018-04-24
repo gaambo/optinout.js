@@ -82,6 +82,8 @@ const optInOut = (userOptions) => {
 
   self.getOptions = () => options;
 
+  self.getPlugins = () => options.plugins;
+
   self.on = (event, callback) => {
     const handlers = events[event] || [];
     handlers.push(callback);

@@ -62,7 +62,7 @@
       "src/**/*.js"
     ],
     "coverageReporters": [
-      "json"
+      "json", "html"
     ]
   },
   "dependencies": {
