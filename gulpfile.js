@@ -65,7 +65,12 @@ gulp.task('rollup-es-module', ['clean'], () => {
 gulp.task('minify', ['rollup'], () => {
   return gulp.src(['./dist/**/*.js', '!./dist/**/*.min.js'], { base: '.'})
     .pipe(plumber())
-    .pipe(uglify())
+    .pipe(uglify({
+      output: {
+        beautify: false, 
+        preamble: `/* ${pkg.name} - v${pkg.version} | Copyright: ${pkg.author} and other contributors | License: https://gitlab.com/optinout/optinout.js */`
+      }
+    }))
     .pipe(rename({
       extname: '.min.js'
     }))

@@ -5,8 +5,11 @@ const pkg = require('../package.json');
 
 const name = 'OptInOut';
 
+const banner = `/* ${pkg.name} - v${pkg.version} | Copyright: ${pkg.author} and other contributors | License: https://gitlab.com/optinout/optinout.js */`;
+
 const browserConfig = {
   input: 'src/browser.js',
+  banner: banner,
   plugins: [
     resolve(), // so Rollup can find `ms`
     commonjs(), // so Rollup can convert `ms` to an ES module
@@ -19,6 +22,7 @@ const browserConfig = {
 
 const moduleConfig = {
   input: 'src/main.js',
+  banner: banner,
   external: [],
   plugins: [
     babel({
