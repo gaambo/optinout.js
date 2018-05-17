@@ -1,6 +1,5 @@
 import cookieStorage from './storages/cookie';
 import localStorage from './storages/localStorage';
-import dataStorage from './storages/data';
 
 import doNotTrack from './helper/doNotTrack';
 
@@ -14,11 +13,8 @@ const optInOut = (userOptions) => {
     storages: {
       cookie: cookieStorage(),
       localStorage: localStorage(),
-      dataStorage: dataStorage(),
     },
-    services: {
-
-    },
+    services: {},
     plugins: [],
     doNotTrack: false,
   };
