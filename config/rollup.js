@@ -15,7 +15,7 @@ const browserConfig = {
     commonjs(), // so Rollup can convert `ms` to an ES module
     babel({
       exclude: ['node_modules/**'],
-      plugins: ["external-helpers"]
+      plugins: ["external-helpers", "transform-object-assign"]
     })
   ]
 };

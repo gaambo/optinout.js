@@ -16,6 +16,7 @@ fixture `Cookies`
 test('CookieStorage Initialize OptOut - OptOut - Reload - Delete', async t => {
   const initOptInOut = ClientFunction(() => {
     window.cookieAdapter = OptInOut.storageAdapters.cookieStorage();
+    debugger;
     window.optinoptouthandler = OptInOut({
       storages: {
         'cookie': window.cookieAdapter
