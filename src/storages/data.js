@@ -31,13 +31,6 @@ const Storage = (userData) => {
     return true;
   };
 
-  const hasItem = (service, key) => { // eslint-disable-line no-unused-vars
-    if (key) {
-      return ((service in data) && (key in data[service]));
-    }
-    return (service in data);
-  };
-
   return {
     get: (service, key) => getItem(service, key),
     set: (service, key, value, update) => setItem(service, key, value, update),

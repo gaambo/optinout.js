@@ -16,7 +16,7 @@ const Storage = (userOptions) => {
     let expires;
     switch (expirationDate.constructor) {
       case Number:
-        expires = date === Infinity ? '; expires=Fri, 31 Dec 9999 23:59:59 GMT' : `; max-age=${expirationDate}`;
+        expires = expirationDate === Infinity ? '; expires=Fri, 31 Dec 9999 23:59:59 GMT' : `; max-age=${expirationDate}`;
         break;
       case String:
         expires = `; expires=${expirationDate}`;
@@ -43,8 +43,13 @@ const Storage = (userOptions) => {
     if (!service) { return null; }
 
     const value = getValue(service) || null;
+    let valueJson;
+    try {
+      valueJson = JSON.parse(value);
+    } catch (err) {
+      valueJson = null;
+    }
 
-    const valueJson = JSON.parse(value);
     if (key) {
       return valueJson[key] || null;
     }
@@ -79,9 +84,12 @@ const Storage = (userOptions) => {
     if (!service || !hasItem(service)) { return false; }
 
     if (key) {
-      const currentValue = getItem(service, key);
-      delete currentValue[key];
-      return setItem(service, key, currentValue, false); // force overwrite
+      const currentValue = getItem(service);
+      const newValue = currentValue;
+      delete newValue[key];
+
+      writeValue(getKey(service), newValue);
+      return true;
     }
     writeValue(getKey(service), '', new Date('01 Jan 1970'));
     return true;

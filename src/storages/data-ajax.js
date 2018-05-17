@@ -13,9 +13,11 @@ const Storage = (startData, userOptions) => {
   const options = Object.assign({}, defaultOptions, userOptions);
 
   const setItem = (service, key, value, update) => {
+    const currentValue = dataStorage.get(service) || false;
+
     dataStorage.set(service, key, value, update);
 
-    const currentValue = dataStorage.get(service) || false;
+
     if (options.ajaxFunction) {
       const ajaxData = Object.assign({}, options.additionalData, {
         service,
@@ -32,8 +34,9 @@ const Storage = (startData, userOptions) => {
   };
 
   const removeItem = (service, key) => {
+    setItem(service, key, null, false);
     dataStorage.delete(service, key);
-    return setItem(service, key, null, false);
+    return true;
   };
 
   return {

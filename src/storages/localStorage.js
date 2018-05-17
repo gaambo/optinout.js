@@ -49,6 +49,14 @@ const Storage = (userOptions) => {
     return null;
   };
 
+  const writeValue = (key, value) => {
+    if (storageAvailable) {
+      localStorage.setItem(key, value);
+      return true;
+    }
+    return false;
+  };
+
   const setItem = (service, key, value, update) => {
     if (storageAvailable) {
       const currentValue = getItem(service) || {};
@@ -60,8 +68,7 @@ const Storage = (userOptions) => {
         newValue = currentValue;
         newValue[key] = value;
       }
-      localStorage.setItem(getNamespacedKey(service), JSON.stringify(newValue));
-      return true;
+      return writeValue(getNamespacedKey(service), JSON.stringify(newValue));
     }
     return false;
   };
@@ -70,8 +77,9 @@ const Storage = (userOptions) => {
     if (storageAvailable) {
       if (key) {
         const currentValue = getItem(service) || {};
-        delete currentValue[key];
-        setItem(service, key, currentValue, false); // force overwrite
+        const newValue = currentValue;
+        delete newValue[key];
+        writeValue(getNamespacedKey(service), JSON.stringify(newValue));
       } else {
         localStorage.removeItem(getNamespacedKey(service));
       }

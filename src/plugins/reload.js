@@ -2,7 +2,8 @@
 
 const Reload = () => {
   const eventCallback = () => {
-    location.reload(); // eslint-disable-line no-restricted-globals
+    console.log(window.location);
+    window.location.reload(); // eslint-disable-line no-restricted-globals
   };
 
   const init = (optInOut) => {
