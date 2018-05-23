@@ -19,9 +19,11 @@ const optInOut = (userOptions) => {
     plugins: [],
     doNotTrack: false,
     language: {
-      undefined: 'undefined',
-      optedIn: 'opted in',
-      optedOut: 'opted out',
+      status: {
+        undefined: 'undefined',
+        optedIn: 'opted in',
+        optedOut: 'opted out',
+      },
     },
   };
 
@@ -164,9 +166,9 @@ const optInOut = (userOptions) => {
 
   self.getStatus = (serviceKey) => {
     const isCurrentlyAllowed = getIsAllowed(serviceKey);
-    if (isCurrentlyAllowed === true) return options.language.optedIn;
-    else if (isCurrentlyAllowed === false) return options.language.optedOut;
-    return options.language.undefined;
+    if (isCurrentlyAllowed === true) return options.language.status.optedIn;
+    else if (isCurrentlyAllowed === false) return options.language.status.optedOut;
+    return options.language.status.undefined;
   };
 
   // INIT OBJECT
