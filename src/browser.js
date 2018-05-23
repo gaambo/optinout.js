@@ -3,6 +3,7 @@ import localStorage from './storages/localStorage';
 import dataStorage from './storages/data';
 import ajaxDataStorage from './storages/data-ajax';
 import gtmPlugin from './plugins/gtm';
+import analyticsPlugin from './plugins/analytics';
 import linkPlugin from './plugins/link';
 import reloadPlugin from './plugins/reload';
 import OptInOut from './main';
@@ -64,6 +65,7 @@ const plugins = {
   gtmPlugin,
   linkPlugin,
   reloadPlugin,
+  analyticsPlugin,
 };
 optInOut.plugins = plugins;
 
