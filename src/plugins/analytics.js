@@ -12,7 +12,7 @@ const Analytics = (userOptions) => {
   const optOutKey = `ga-disable-${options.propertyId}`;
 
   const eventCallback = (data, event) => {
-    if (!data.service || data.service !== options.serviceName) {
+    if (!data.service || data.service !== options.serviceKey) {
       return;
     }
     if (event === 'optOut') {

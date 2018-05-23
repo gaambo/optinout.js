@@ -2,7 +2,7 @@ import OptInOut from '../../src/main';
 import DataStorage from '../../src/storages/data';
 
 test("Optout of Service with optOut Mode", () => {
-  let dataStorage =  DataStorage({});
+  let dataStorage = DataStorage({});
   let obj = OptInOut({
     storages: {
       data: dataStorage,
@@ -20,7 +20,7 @@ test("Optout of Service with optOut Mode", () => {
 });
 
 test("Optin to Service with optIn mode", () => {
-  let dataStorage =  DataStorage({});
+  let dataStorage = DataStorage({});
   let obj = OptInOut({
     storages: {
       data: dataStorage,
@@ -39,7 +39,7 @@ test("Optin to Service with optIn mode", () => {
 });
 
 test("Optin with wrong service", () => {
-  let dataStorage =  DataStorage({});
+  let dataStorage = DataStorage({});
   let obj = OptInOut({
     storages: {
       data: dataStorage,
@@ -55,7 +55,7 @@ test("Optin with wrong service", () => {
 });
 
 test("Optin to Service with optIn mode with specified storage", () => {
-  let dataStorage =  DataStorage({});
+  let dataStorage = DataStorage({});
   let obj = OptInOut({
     storages: {
       data: dataStorage,
@@ -74,7 +74,7 @@ test("Optin to Service with optIn mode with specified storage", () => {
 });
 
 test("Optout of Service with optOut Mode with specified storage", () => {
-  let dataStorage =  DataStorage({});
+  let dataStorage = DataStorage({});
   let obj = OptInOut({
     storages: {
       data: dataStorage,
@@ -92,7 +92,7 @@ test("Optout of Service with optOut Mode with specified storage", () => {
 });
 
 test("Optin after opting out - with optIn service - checks date", () => { //TODO should check <= oder so? weil selbe zeit genau 
-  let dataStorage =  DataStorage({});
+  let dataStorage = DataStorage({});
   let obj = OptInOut({
     storages: {
       data: dataStorage,
@@ -102,7 +102,7 @@ test("Optin after opting out - with optIn service - checks date", () => { //TODO
     }
   });
 
-  obj.optOut('facebook'); 
+  obj.optOut('facebook');
 
   expect(obj.isAllowed('facebook')).toBe(false);
 
@@ -110,14 +110,14 @@ test("Optin after opting out - with optIn service - checks date", () => { //TODO
   setTimeout(() => {
     obj.optIn('facebook');
 
-  expect(obj.isAllowed('facebook')).toBe(true);
-  }, 1000); 
+    expect(obj.isAllowed('facebook')).toBe(true);
+  }, 1000);
 
-  
+
 });
 
 test("Optout after opting in - with optIn service - checks date", () => {
-  let dataStorage =  DataStorage({});
+  let dataStorage = DataStorage({});
   let obj = OptInOut({
     storages: {
       data: dataStorage,
@@ -127,8 +127,8 @@ test("Optout after opting in - with optIn service - checks date", () => {
     }
   });
 
-  obj.optIn('facebook'); 
-  
+  obj.optIn('facebook');
+
   expect(obj.isAllowed('facebook')).toBe(true);
 
   obj.optOut('facebook');
@@ -137,7 +137,7 @@ test("Optout after opting in - with optIn service - checks date", () => {
 });
 
 test("Optin after opting out - with optOut service - checks date", () => {
-  let dataStorage =  DataStorage({});
+  let dataStorage = DataStorage({});
   let obj = OptInOut({
     storages: {
       data: dataStorage,
@@ -147,7 +147,7 @@ test("Optin after opting out - with optOut service - checks date", () => {
     }
   });
 
-  obj.optOut('analytics'); 
+  obj.optOut('analytics');
 
   expect(obj.isAllowed('analytics')).toBe(false);
 
@@ -157,7 +157,7 @@ test("Optin after opting out - with optOut service - checks date", () => {
 });
 
 test("Optout after opting in - with optOut service - checks date", () => {
-  let dataStorage =  DataStorage({});
+  let dataStorage = DataStorage({});
   let obj = OptInOut({
     storages: {
       data: dataStorage,
@@ -169,8 +169,8 @@ test("Optout after opting in - with optOut service - checks date", () => {
 
   expect(obj.isAllowed('analytics')).toBe(true);
 
-  obj.optIn('analytics'); 
-  
+  obj.optIn('analytics');
+
   expect(obj.isAllowed('analytics')).toBe(true);
 
   //wait so date of optin and optout is not the same
@@ -180,11 +180,11 @@ test("Optout after opting in - with optOut service - checks date", () => {
     expect(obj.isAllowed('analytics')).toBe(false);
   }, 1000);
 
-  
+
 });
 
 test("Optedin set to false explicitly", () => {
-  let dataStorage =  DataStorage({
+  let dataStorage = DataStorage({
     facebook: { optedIn: false }
   });
   let obj = OptInOut({
@@ -200,7 +200,7 @@ test("Optedin set to false explicitly", () => {
 });
 
 test("Set doNotTrack but use default (no browser)", () => {
-  let dataStorage =  DataStorage({});
+  let dataStorage = DataStorage({});
   let obj = OptInOut({
     storages: {
       data: dataStorage,
@@ -215,31 +215,33 @@ test("Set doNotTrack but use default (no browser)", () => {
 });
 
 test("Check Status Message - OptIn and OptOut", () => {
-  let dataStorage =  DataStorage({});
+  let dataStorage = DataStorage({});
   let obj = OptInOut({
     storages: {
       data: dataStorage,
     },
     services: {
       facebook: { mode: 'optIn' }
-    }, 
+    },
     language: {
-      undefined: 'undefined', 
-      optedIn: 'opted in', 
-      optedOut: 'opted out',
+      status: {
+        undefined: 'undefined',
+        optedIn: 'opted in',
+        optedOut: 'opted out',
+      },
     },
   });
 
   expect(obj.getStatus('facebook')).toEqual('undefined');
 
-  obj.optIn('facebook'); 
+  obj.optIn('facebook');
   expect(obj.getStatus('facebook')).toEqual('opted in');
 
   //wait so time of optin and optout is not the same
   setTimeout(() => {
     obj.optOut('facebook');
     expect(obj.getStatus('facebook')).toEqual('opted out');
-  }, 1000); 
-  
-  
+  }, 1000);
+
+
 });
