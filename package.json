@@ -2,6 +2,7 @@
   "name": "optinout.js",
   "version": "0.9.9",
   "description": "a simple js framework for handling opt-in and opt-out for tracking & cookies",
+  "keywords": ["optinout", "optin", "optout", "privacy", "gdpr", "optout tracking"],
   "main": "dist/optinout.js",
   "jsnext:main": "src/index.js",
   "commonModule": "dist/optinout.cjs.js",
