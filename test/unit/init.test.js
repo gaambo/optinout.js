@@ -1,12 +1,17 @@
 import OptInOut from '../../src/main';
 import CookieStorage from '../../src/storages/cookie';
 
-const defaultOptions = { plugins: [], doNotTrack: false };
+const defaultLanguage = {
+  undefined: 'undefined', 
+  optedIn: 'opted in', 
+  optedOut: 'opted out',
+};
+const defaultOptions = { plugins: [], doNotTrack: false, language: defaultLanguage };
 
 test("Initialize Default/Empty", () => {
   let obj = OptInOut({
     storages: {},
-    services: {}
+    services: {},
   });
 
   expect(obj.getOptions()).toEqual(defaultOptions);

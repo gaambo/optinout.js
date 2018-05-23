@@ -212,4 +212,34 @@ test("Set doNotTrack but use default (no browser)", () => {
   });
 
   expect(obj.isAllowed('analytics')).toBe(true);
-})
+});
+
+test("Check Status Message - OptIn and OptOut", () => {
+  let dataStorage =  DataStorage({});
+  let obj = OptInOut({
+    storages: {
+      data: dataStorage,
+    },
+    services: {
+      facebook: { mode: 'optIn' }
+    }, 
+    language: {
+      undefined: 'undefined', 
+      optedIn: 'opted in', 
+      optedOut: 'opted out',
+    },
+  });
+
+  expect(obj.getStatus('facebook')).toEqual('undefined');
+
+  obj.optIn('facebook'); 
+  expect(obj.getStatus('facebook')).toEqual('opted in');
+
+  //wait so time of optin and optout is not the same
+  setTimeout(() => {
+    obj.optOut('facebook');
+    expect(obj.getStatus('facebook')).toEqual('opted out');
+  }, 1000); 
+  
+  
+});

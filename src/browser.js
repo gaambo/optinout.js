@@ -22,6 +22,13 @@ optInOut.isAllowed = (service, storage) => {
   return null;
 };
 
+optInOut.getStatus = (service) => {
+  if (optInOut.instnace !== undefined) {
+    return optInOut.instance.getStatus(service);
+  }
+  return null;
+};
+
 optInOut.optIn = (service, storage) => {
   if (optInOut.instance !== undefined) {
     return optInOut.instance.optIn(service, storage);

@@ -1,3 +1,4 @@
+/* global Exception */
 import cookieStorage from './storages/cookie';
 import localStorage from './storages/localStorage';
 
@@ -17,6 +18,11 @@ const optInOut = (userOptions) => {
     services: {},
     plugins: [],
     doNotTrack: false,
+    language: {
+      undefined: 'undefined',
+      optedIn: 'opted in',
+      optedOut: 'opted out',
+    },
   };
 
   // PRIVATE PROPERTIES
@@ -49,6 +55,57 @@ const optInOut = (userOptions) => {
     handlers.forEach((handler) => {
       handler.call(self, data, event);
     });
+  };
+
+  const getIsAllowed = (serviceKey, storageKey = false) => {
+    let service;
+    let checkStorages;
+    if (serviceKey && services[serviceKey]) {
+      service = services[serviceKey];
+      if (storageKey && storages[storageKey]) {
+        const storagesCopy = Object.assign({}, storages);
+        delete storagesCopy[storageKey];
+        checkStorages = [storageKey, ...Object.keys(storagesCopy)];
+      } else {
+        checkStorages = Object.keys(storages);
+      }
+    } else {
+      throw new Exception(`service ${serviceKey} does not exist/is not configured`);
+    }
+
+    let allowed = null; // default
+
+    checkStorages.every((currentStorageKey) => {
+      const storage = storages[currentStorageKey];
+      const value = storage.get(serviceKey);
+
+      if (typeof value === 'undefined' || value === undefined || value === null) return true; // continue
+
+      if (service.mode === 'optIn') {
+        if (value.optedIn === false) {
+          allowed = false;
+        } else if (value.optedIn && !value.optedOut) {
+          allowed = true;
+        } else if (Date.parse(value.optedOut) < Date.parse(value.optedIn)) {
+          allowed = true;
+        } else if (Date.parse(value.optedOut) > Date.parse(value.optedIn)) {
+          allowed = false;
+        }
+      } else if (service.mode === 'optOut') {
+        if (value.optedIn === undefined || !value.optedIn) {
+          allowed = !value.optedOut;
+        } else if (Date.parse(value.optedIn) > Date.parse(value.optedOut)) {
+          allowed = true;
+        } else if (Date.parse(value.optedIn) < Date.parse(value.optedOut)) {
+          allowed = false;
+        }
+      }
+
+      if (allowed !== null) return false; // break
+      return true;
+    });
+
+    return allowed;
   };
 
   // PUBLIC PROPERTIES
@@ -87,53 +144,9 @@ const optInOut = (userOptions) => {
   };
 
   self.isAllowed = (serviceKey, storageKey = false) => {
-    let service;
-    let checkStorages;
-    if (serviceKey && services[serviceKey]) {
-      service = services[serviceKey];
-      if (storageKey && storages[storageKey]) {
-        const storagesCopy = Object.assign({}, storages);
-        delete storagesCopy[storageKey];
-        checkStorages = [storageKey, ...Object.keys(storagesCopy)];
-      } else {
-        checkStorages = Object.keys(storages);
-      }
-    }
-
-    let allowed = null; // default
-
-    checkStorages.every((currentStorageKey) => {
-      const storage = storages[currentStorageKey];
-      const value = storage.get(serviceKey);
-
-      if (typeof value === 'undefined' || value === undefined || value === null) return true; // continue
-
-      if (service.mode === 'optIn') {
-        if (value.optedIn === false) {
-          allowed = false;
-        } else if (value.optedIn && !value.optedOut) {
-          allowed = true;
-        } else if (Date.parse(value.optedOut) < Date.parse(value.optedIn)) {
-          allowed = true;
-        } else if (Date.parse(value.optedOut) > Date.parse(value.optedIn)) {
-          allowed = false;
-        }
-      } else if (service.mode === 'optOut') {
-        if (value.optedIn === undefined || !value.optedIn) {
-          allowed = !value.optedOut;
-        } else if (Date.parse(value.optedIn) > Date.parse(value.optedOut)) {
-          allowed = true;
-        } else if (Date.parse(value.optedIn) < Date.parse(value.optedOut)) {
-          allowed = false;
-        }
-      }
-
-      if (allowed !== null) return false; // break
-      return true;
-    });
-
+    let allowed = getIsAllowed(serviceKey, storageKey);
+    const service = services[serviceKey];
     const defaultAllowed = service.default ? service.default : (service.mode !== 'optIn');
-
     if (allowed === null) { // use do not track or default
       if (options.doNotTrack) {
         if (doNotTrack()) {
@@ -147,6 +160,13 @@ const optInOut = (userOptions) => {
     }
 
     return allowed;
+  };
+
+  self.getStatus = (serviceKey) => {
+    const isCurrentlyAllowed = getIsAllowed(serviceKey);
+    if (isCurrentlyAllowed === true) return options.language.optedIn;
+    else if (isCurrentlyAllowed === false) return options.language.optedOut;
+    return options.language.undefined;
   };
 
   // INIT OBJECT
