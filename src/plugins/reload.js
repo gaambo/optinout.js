@@ -2,7 +2,6 @@
 
 const Reload = () => {
   const eventCallback = () => {
-    console.log(window.location);
     window.location.reload(); // eslint-disable-line no-restricted-globals
   };
 

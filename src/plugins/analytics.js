@@ -1,7 +1,7 @@
 /* global Exception */
 const Analytics = (userOptions) => {
   const defaultOptions = {
-    serviceName: 'analytics',
+    serviceKey: 'analytics',
     propertyId: false,
   };
 
