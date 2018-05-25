@@ -23,14 +23,14 @@ test:
 publish:artifacts:
   stage: deploy
   only:
-    - /^v.*$/
+    - master
   script:
     - npm run build
   artifacts: 
     name: "optinout.js-$CI_COMMIT_REF_NAME"
     paths:
       - src
-      - dist
+      - dist/
 
 publish:npm:
   stage: deploy
