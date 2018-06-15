@@ -201,11 +201,14 @@ const optInOut = (userOptions) => {
   // init plugins
   events = {};
   options.plugins.forEach((plugin) => {
-    if (typeof plugin.init === 'function') {
+    if (typeof plugin === 'function') {
+      plugin(self);
+    } else if (typeof plugin.init === 'function') {
       plugin.init(self);
     }
   });
 
+  triggerEvent('init', self);
   return self;
 };
 

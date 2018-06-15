@@ -83,3 +83,22 @@ test("Initialize with another option", () => {
 
   expect(obj.getOption('anyOption')).toEqual(123);
 });
+
+test("Trigger init event", () => {
+  const initCallback = jest.fn();
+
+  let obj = OptInOut({
+    services: {
+      facebook: {
+        mode: 'optIn',
+      }
+    }, 
+    plugins: [
+      (lib) => {
+        lib.on('init', initCallback);
+      }
+    ]
+  }); 
+
+  expect(initCallback).toBeCalled();
+});
