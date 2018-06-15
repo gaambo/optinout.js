@@ -19,11 +19,10 @@ const optInOut = (userOptions) => {
     plugins: [],
     doNotTrack: false,
     language: {
-      status: {
-        undefined: 'undefined',
-        optedIn: 'opted in',
-        optedOut: 'opted out',
-      },
+      undefined: 'undefined',
+      optedIn: 'opted in',
+      optedOut: 'opted out',
+      defaults: {},
     },
   };
 
@@ -33,6 +32,7 @@ const optInOut = (userOptions) => {
   let storages;
   let services;
   let events;
+  let language; // eslint-disable-line prefer-const
 
   // PRIVATE METHODS
 
@@ -116,13 +116,17 @@ const optInOut = (userOptions) => {
   self.optIn = (serviceKey, storageKey = false) => {
     const date = new Date();
     setValueInStorages(serviceKey, 'optedIn', date, storageKey);
-    triggerEvent('optIn', { service: serviceKey, storage: storageKey, date });
+    triggerEvent('optIn', {
+      service: serviceKey, storage: storageKey, date, status: self.getStatus(serviceKey, true),
+    });
   };
 
   self.optOut = (serviceKey, storageKey = false) => {
     const date = new Date();
     setValueInStorages(serviceKey, 'optedOut', date, storageKey);
-    triggerEvent('optOut', { service: serviceKey, storage: storageKey, date });
+    triggerEvent('optOut', {
+      service: serviceKey, storage: storageKey, date, status: self.getStatus(serviceKey, false),
+    });
   };
 
   self.getOption = optionKey => options[optionKey];
@@ -164,11 +168,15 @@ const optInOut = (userOptions) => {
     return allowed;
   };
 
-  self.getStatus = (serviceKey) => {
-    const isCurrentlyAllowed = getIsAllowed(serviceKey);
-    if (isCurrentlyAllowed === true) return options.language.status.optedIn;
-    else if (isCurrentlyAllowed === false) return options.language.status.optedOut;
-    return options.language.status.undefined;
+  self.getStatus = (serviceKey, isAllowed = null) => {
+    const isCurrentlyAllowed = isAllowed !== null ? isAllowed : getIsAllowed(serviceKey);
+    if (isCurrentlyAllowed === true) return language.optedIn;
+    else if (isCurrentlyAllowed === false) return language.optedOut;
+
+    return [
+      language.undefined,
+      language.defaults[serviceKey] || null,
+    ];
   };
 
   // INIT OBJECT
@@ -208,6 +216,14 @@ const optInOut = (userOptions) => {
     }
   });
 
+  // init language
+  language = Object.assign( // eslint-disable-line prefer-const
+    {},
+    defaultOptions.language,
+    userOptions.language,
+  );
+
+  // finalizie setup
   triggerEvent('init', self);
   return self;
 };

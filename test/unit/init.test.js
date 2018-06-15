@@ -2,11 +2,10 @@ import OptInOut from '../../src/main';
 import CookieStorage from '../../src/storages/cookie';
 
 const defaultLanguage = {
-  status: {
-    undefined: 'undefined', 
-    optedIn: 'opted in', 
-    optedOut: 'opted out',
-  }  
+  undefined: 'undefined',
+  defaults: {}, 
+  optedIn: 'opted in', 
+  optedOut: 'opted out', 
 };
 const defaultOptions = { plugins: [], doNotTrack: false, language: defaultLanguage };
 
