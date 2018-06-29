@@ -5,13 +5,13 @@ const Reload = () => {
     window.location.reload(); // eslint-disable-line no-restricted-globals
   };
 
-  const init = (optInOut) => {
+  const setup = (optInOut) => {
     optInOut.on('optIn', eventCallback);
     optInOut.on('optOut', eventCallback);
   };
 
   return {
-    init,
+    setup,
   };
 };
 

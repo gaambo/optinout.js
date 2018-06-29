@@ -211,8 +211,8 @@ const optInOut = (userOptions) => {
   options.plugins.forEach((plugin) => {
     if (typeof plugin === 'function') {
       plugin(self);
-    } else if (typeof plugin.init === 'function') {
-      plugin.init(self);
+    } else if (typeof plugin.setup === 'function') {
+      plugin.setup(self);
     }
   });
 

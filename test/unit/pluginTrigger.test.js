@@ -2,13 +2,9 @@
 
 import OptInOut from '../../src/main';
 
-test("Initialize with Plugin", () => {
-  let initCalled = false; 
-
+test("Initialize with object Plugin", () => {
   const plugin = {
-    init: (lib) => {
-      initCalled = true;
-    },
+    setup: jest.fn()
   }
   let obj = OptInOut({
     plugins: [
@@ -17,7 +13,20 @@ test("Initialize with Plugin", () => {
   });
 
   expect(obj.getPlugins()).toEqual([plugin]);
-  expect(initCalled).toBeTruthy();
+  expect(plugin.setup).toHaveBeenLastCalledWith(obj);
+});
+
+test("Initialize with method Plugin", () => {
+  const plugin = jest.fn();
+
+  let obj = OptInOut({
+    plugins: [
+      plugin
+    ]
+  });
+
+  expect(obj.getPlugins()).toEqual([plugin]);
+  expect(plugin).toHaveBeenLastCalledWith(obj);
 });
 
 test("Trigger optIn Plugin Event", () => {
@@ -32,7 +41,7 @@ test("Trigger optIn Plugin Event", () => {
   };
 
   const plugin = {
-    init: (lib) => {
+    setup: (lib) => {
       lib.on('optIn', trigger);
     },
   }
