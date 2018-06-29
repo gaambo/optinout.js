@@ -22,13 +22,13 @@ const GTM = (userOptions) => {
     });
   };
 
-  const init = (optInOut) => {
+  const setup = (optInOut) => {
     optInOut.on('optIn', eventCallback);
     optInOut.on('optOut', eventCallback);
   };
 
   return {
-    init,
+    setup,
   };
 };
 

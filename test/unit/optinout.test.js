@@ -232,7 +232,7 @@ test("Check Status Message - OptIn and OptOut", () => {
     },
   });
 
-  expect(obj.getStatus('facebook')).toEqual('undefined');
+  expect(obj.getStatus('facebook')).toEqual(['undefined', null]);
 
   obj.optIn('facebook');
   expect(obj.getStatus('facebook')).toEqual('opted in');

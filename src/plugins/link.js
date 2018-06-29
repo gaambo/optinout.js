@@ -6,7 +6,7 @@ const LinkHelper = (userOptions) => {
 
   const options = Object.assign({}, defaultOptions, userOptions);
 
-  const init = (optInOut) => {
+  const setup = (optInOut) => {
     if (document && document.querySelectorAll) {
       if (options.optInClickSelector) {
         let elements;
@@ -34,7 +34,7 @@ const LinkHelper = (userOptions) => {
   };
 
   return {
-    init,
+    setup,
   };
 };
 
