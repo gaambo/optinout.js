@@ -57,7 +57,7 @@ const Storage = (userOptions) => {
   };
 
   const writeValue = (key, value, expires) => {
-    document.cookie = `${encodeURIComponent(key)}=${encodeURIComponent(JSON.stringify(value))}${getExpirationString(expires)}${options.domain ? `; domain=${options.domain}` : ''}${options.Path ? `; path=${options.Path}` : ''}${options.secure ? '; secure' : ''}`;
+    document.cookie = `${encodeURIComponent(key)}=${encodeURIComponent(JSON.stringify(value))}${getExpirationString(expires)}${options.domain ? `; domain=${options.domain}` : ''}${options.path ? `; path=${options.path}` : ''}${options.secure ? '; secure' : ''}`;
   };
 
   const setItem = (service, key, value, update) => {
