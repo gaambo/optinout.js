@@ -61,3 +61,15 @@ test("Test different Expiration-Date Types in CookieStorage", () => {
   cookieStorageAny.set('analytics', 'optIn', optInDate, false);
   expect(_cookie).toMatch(/(?!expires=)$/);
 });
+
+test("Set cookie path", () => {
+  var _cookie = document.cookie;
+  document.__defineSetter__("cookie", function(the_cookie) {_cookie=the_cookie;} );
+  document.__defineGetter__("cookie", function() {return _cookie;} );
+
+  let date = new Date();
+
+  let cookieStorage = CookieStorage({ path: 'subdomain.example.com' });
+  cookieStorage.set('analytics', 'optIn', date, false);
+  expect(_cookie).toMatch(/path=subdomain.example.com$/);
+});
