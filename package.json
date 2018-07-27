@@ -57,7 +57,9 @@
     "rollup-plugin-uglify": "^3.0.0",
     "rollup-stream": "^1.24.1",
     "uglify-es": "^3.3.9",
-    "vinyl-source-stream": "^2.0.0"
+    "vinyl-source-stream": "^2.0.0",
+    "gulp": "^3.9.1",
+    "testcafe": "^0.19.1"
   },
   "files": [
     "src",
@@ -74,9 +76,5 @@
       "json",
       "html"
     ]
-  },
-  "dependencies": {
-    "gulp": "^3.9.1",
-    "testcafe": "^0.19.1"
   }
 }
