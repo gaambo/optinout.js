@@ -1,6 +1,6 @@
 {
   "name": "optinout.js",
-  "version": "0.10.1",
+  "version": "1.0.0",
   "description": "a simple js framework for handling opt-in and opt-out for tracking & cookies",
   "keywords": [
     "optinout",
