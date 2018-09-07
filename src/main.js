@@ -1,4 +1,3 @@
-/* global Exception */
 import cookieStorage from './storages/cookie';
 import localStorage from './storages/localStorage';
 
@@ -72,7 +71,7 @@ const optInOut = (userOptions) => {
         checkStorages = Object.keys(storages);
       }
     } else {
-      throw new Exception(`service ${serviceKey} does not exist/is not configured`);
+      throw new Error(`service ${serviceKey} does not exist/is not configured`);
     }
 
     let allowed = null; // default
