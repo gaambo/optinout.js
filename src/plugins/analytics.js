@@ -1,4 +1,3 @@
-/* global Exception */
 const Analytics = (userOptions) => {
   const defaultOptions = {
     serviceKey: 'analytics',
@@ -7,7 +6,7 @@ const Analytics = (userOptions) => {
 
   const options = Object.assign({}, defaultOptions, userOptions);
 
-  if (!options.propertyId) throw new Exception('propertyId needs to be set in Analytics plugin');
+  if (!options.propertyId) throw new Error('propertyId needs to be set in Analytics plugin');
 
   const optOutKey = `ga-disable-${options.propertyId}`;
 
