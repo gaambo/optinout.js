@@ -167,6 +167,17 @@ const optInOut = (userOptions) => {
     return allowed;
   };
 
+  self.isSet = (serviceKey, storageKey = false) => {
+    const allowed = getIsAllowed(serviceKey, storageKey);
+    if (allowed === null) {
+      if (options.doNotTrack && doNotTrack()) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
+
   self.getStatus = (serviceKey, isAllowed = null) => {
     const isCurrentlyAllowed = isAllowed !== null ? isAllowed : getIsAllowed(serviceKey);
     if (isCurrentlyAllowed === true) return language.optedIn;
