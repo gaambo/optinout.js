@@ -84,20 +84,33 @@ const optInOut = (userOptions) => {
 
       if (service.mode === 'optIn') {
         if (value.optedIn === false) {
+          // optedIn is explicitly false (has been set, but not to optin)
           allowed = false;
         } else if (value.optedIn && !value.optedOut) {
+          // optedIn is set and optedOut is not set
           allowed = true;
+        } else if (value.optedOut && !value.optedIn) {
+          // optedOut is set and optedIn is not set
+          allowed = false;
         } else if (Date.parse(value.optedOut) < Date.parse(value.optedIn)) {
+          // both set, optedIn is newer
           allowed = true;
         } else if (Date.parse(value.optedOut) > Date.parse(value.optedIn)) {
+          // both set, optedOut is newer
           allowed = false;
         }
       } else if (service.mode === 'optOut') {
         if (value.optedIn === undefined || !value.optedIn) {
+          // optedIn is not set - refer to optOut
           allowed = !value.optedOut;
+        } else if (value.optedIn && !value.optedOut) {
+          // optIn is explicitly set and optOut not
+          allowed = true;
         } else if (Date.parse(value.optedIn) > Date.parse(value.optedOut)) {
+          // both set, optedIn is newser
           allowed = true;
         } else if (Date.parse(value.optedIn) < Date.parse(value.optedOut)) {
+          // both set, optedOut is newer
           allowed = false;
         }
       }
@@ -106,7 +119,7 @@ const optInOut = (userOptions) => {
       return true;
     });
 
-    return allowed;
+    return allowed; // can be null: means, nothing is set yet
   };
 
   // PUBLIC PROPERTIES
