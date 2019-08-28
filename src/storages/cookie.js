@@ -3,7 +3,7 @@ const Storage = (userOptions) => {
     namespace: 'optInOut',
     expiration: Infinity,
     domain: false,
-    path: false,
+    path: '/',
     secure: false,
   };
 
