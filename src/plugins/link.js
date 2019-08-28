@@ -1,3 +1,12 @@
+const getDataAttribute = (el, key) => {
+  if (el.dataset) {
+    return el.dataset[key];
+  } else if (el.getAttribute) {
+    return el.getAttribute(`data-${key}`);
+  }
+  return null;
+};
+
 const LinkHelper = (userOptions) => {
   const defaultOptions = {
     optInClickSelector: '.optInOut-optIn',
@@ -13,9 +22,11 @@ const LinkHelper = (userOptions) => {
         // OPTIN
         elements = document.querySelectorAll(options.optInClickSelector);
         elements.forEach((el) => {
-          if (el.dataset.service) {
+          const service = getDataAttribute(el, 'service');
+          const storage = getDataAttribute(el, 'storage') || false;
+          if (service) {
             el.addEventListener('click', () => {
-              optInOut.optIn(el.dataset.service, el.dataset.storage || false);
+              optInOut.optIn(service, storage);
             });
           }
         });
@@ -23,9 +34,11 @@ const LinkHelper = (userOptions) => {
         // OPTOUT
         elements = document.querySelectorAll(options.optOutClickSelector);
         elements.forEach((el) => {
-          if (el.dataset.service) {
+          const service = getDataAttribute(el, 'service');
+          const storage = getDataAttribute(el, 'storage') || false;
+          if (service) {
             el.addEventListener('click', () => {
-              optInOut.optOut(el.dataset.service, el.dataset.storage || false);
+              optInOut.optOut(service, storage);
             });
           }
         });
