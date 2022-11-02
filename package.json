@@ -43,7 +43,7 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.13.0",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-plumber": "^1.2.0",
     "gulp-rename": "^1.4.0",
     "gulp-rollup": "^2.16.2",
